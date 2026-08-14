@@ -1,0 +1,64 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 58,
+    "spacing": 0,
+    "margin-top": 8,
+    "margin-left": 20,
+    "margin-right": 20,
+    "output": ["DP-3"],
+
+    "modules-left": [],
+    "modules-center": [],
+    "modules-right": [
+        "custom/cpu-temp", "custom/separator",
+        "custom/gpu-temp", "custom/separator",
+        "pulseaudio", "custom/separator",
+        "clock#date", "custom/separator",
+        "clock#time"
+    ],
+
+    "clock#date": {
+        "format": "{:%A, %B %d}",
+        "tooltip": false
+    },
+
+    "clock#time": {
+        "format": "{:%H:%M}",
+        "tooltip": false
+    },
+
+    "custom/cpu-temp": {
+        "exec": "~/.config/waybar/scripts/cpu-temp.sh",
+        "return-type": "json",
+        "interval": 5,
+        "format": " {text}",
+        "tooltip": true
+    },
+
+    "custom/gpu-temp": {
+        "exec": "~/.config/waybar/scripts/gpu-temp.sh",
+        "return-type": "json",
+        "interval": 5,
+        "format": " {text}",
+        "tooltip": true
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": " muted",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "tooltip": false,
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
+        "scroll-step": 5
+    },
+
+    "custom/separator": {
+        "format": "|",
+        "tooltip": false
+    }
+}

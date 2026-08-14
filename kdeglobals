@@ -1,0 +1,13 @@
+[General]
+ColorScheme=CatppuccinMochaMauve
+Name=Catppuccin Mocha Mauve
+font=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
+fixed=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
+toolBarFont=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
+menuFont=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
+
+[Icons]
+Theme=breeze-dark
+
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop

@@ -1,0 +1,54 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 20px;
+    min-height: 0;
+}
+
+tooltip {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+}
+
+window#waybar {
+    background: rgba(30, 30, 46, 0.92); /* base */
+    color: #cdd6f4;                     /* text */
+    border-radius: 2px; /* matches decoration.rounding in hyprland.lua */
+}
+
+#clock-date,
+#clock-time,
+#custom-cpu-temp,
+#custom-gpu-temp,
+#pulseaudio {
+    padding: 0 8px;
+    color: #cdd6f4;
+}
+
+#custom-separator {
+    padding: 0 6px;
+    color: #45475a; /* surface1 */
+}
+
+#clock-date {
+    color: #cdd6f4;
+}
+
+#clock-time {
+    color: #f5e0dc; /* rosewater */
+    font-weight: bold;
+}
+
+#custom-cpu-temp {
+    color: #fab387; /* peach */
+}
+
+#custom-gpu-temp {
+    color: #a6e3a1; /* green */
+}
+
+#pulseaudio {
+    color: #89b4fa; /* blue */
+}
+
+#pulseaudio.muted {
+    color: #f38ba8; /* red */
+}

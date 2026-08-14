@@ -1,0 +1,11 @@
+{
+    "runtime": {
+        "version": "LuaJIT"
+    },
+    "diagnostics": {
+        "globals": ["hl"]
+    },
+    "workspace": {
+        "checkThirdParty": false
+    }
+}

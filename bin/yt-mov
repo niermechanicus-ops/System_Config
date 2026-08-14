@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Download a YouTube video and transcode it to a DaVinci-Resolve-friendly
+# .mov (DNxHR HQ + PCM audio) in ~/Videos.
+#
+# Note: yt-dlp's own --recode-video just remuxes when the codec technically
+# fits the container, which can produce audio Resolve's decoder rejects even
+# though ffmpeg/ffprobe read it fine. Always fully re-encoding avoids that.
+#
+# Video codec is DNxHR, not H.264: the free/non-Studio build of DaVinci
+# Resolve on Linux has no H.264/H.265 decoder (that's licensed and gated to
+# Studio there), so an H.264 .mov imports as audio-only with a blank video
+# track. DNxHR is an open, unencumbered ffmpeg encoder that free Resolve
+# reads natively.
+#
+# Usage: yt-mov <url> [more urls...]
+set -euo pipefail
+
+out_dir="$HOME/Videos"
+mkdir -p "$out_dir"
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: yt-mov <youtube-url> [more urls...]" >&2
+    exit 1
+fi
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "$tmp_dir"' EXIT
+
+yt-dlp --merge-output-format mkv -o "${tmp_dir}/%(title)s.%(ext)s" "$@"
+
+for f in "$tmp_dir"/*; do
+    [ -f "$f" ] || continue
+    title=$(basename "${f%.*}")
+    out="${out_dir}/${title}.mov"
+    ffmpeg -y -i "$f" \
+        -c:v dnxhd -profile:v dnxhr_hq -pix_fmt yuv422p \
+        -c:a pcm_s16le -ar 48000 \
+        "$out"
+    echo "Saved: $out"
+done

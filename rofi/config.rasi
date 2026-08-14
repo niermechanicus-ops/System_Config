@@ -1,0 +1,8 @@
+configuration {
+    modes:          "drun,run,window";
+    show-icons:     true;
+    display-drun:   "Apps";
+    drun-display-format: "{icon} {name}";
+}
+
+@theme "catppuccin-mocha.rasi"
