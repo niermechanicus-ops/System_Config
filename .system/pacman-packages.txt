@@ -17,6 +17,7 @@ grim
 grub
 gst-plugin-pipewire
 htop
+hypridle
 hyprland
 hyprlock
 hyprpaper
@@ -32,11 +33,14 @@ mkinitcpio
 mpv
 nano
 neovim
-network-manager-applet
 networkmanager
+network-manager-applet
+noto-fonts-cjk
+noto-fonts-emoji
 nvidia-open
 obs-studio
 opencl-nvidia
+papirus-icon-theme
 pipewire
 pipewire-alsa
 pipewire-jack
@@ -49,6 +53,7 @@ rofi
 sddm
 slurp
 smartmontools
+starship
 steam
 sudo
 swayimg
@@ -70,4 +75,5 @@ yt-dlp
 zram-generator
 zsh
 zsh-autocomplete
+zsh-autosuggestions
 zsh-syntax-highlighting

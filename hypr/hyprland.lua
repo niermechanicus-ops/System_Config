@@ -37,7 +37,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal = "kitty"
 local fileManager = "dolphin"
-local menu = "hyprlauncher"
+local menu = "rofi -show drun"
 
 -------------------
 ---- AUTOSTART ----
@@ -51,6 +51,7 @@ local menu = "hyprlauncher"
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("hypridle")
 end)
 
 -- Waybar runs in the "bottom" layer (see waybar/config.jsonc) so fullscreen

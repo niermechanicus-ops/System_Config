@@ -1,3 +1,4 @@
+catppuccin-gtk-theme-mocha
 davinci-resolve
+papirus-folders-catppuccin-git
 yay
-yay-debug

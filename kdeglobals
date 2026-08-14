@@ -7,7 +7,7 @@ toolBarFont=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
 menuFont=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
 
 [Icons]
-Theme=breeze-dark
+Theme=Papirus-Dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop

@@ -35,6 +35,7 @@ link icons/catppuccin-mocha-dark-cursors  "$HOME/.local/share/icons/catppuccin-m
 link icons/catppuccin-mocha-mauve-cursors "$HOME/.local/share/icons/catppuccin-mocha-mauve-cursors"
 link zsh/zshrc          "$HOME/.zshrc"
 link bashrc            "$HOME/.bashrc"
+link starship.toml        "$HOME/.config/starship.toml"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
 
 # obs-studio only symlinks its themes subdir; the rest of ~/.config/obs-studio

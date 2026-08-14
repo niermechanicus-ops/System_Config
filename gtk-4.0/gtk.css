@@ -1,0 +1,5 @@
+/* GTK4/libadwaita apps ignore gtk-theme-name in settings.ini — the only
+ * way to theme them is to load the theme's stylesheet from this exact
+ * path. Importing (rather than symlinking the file in) keeps this a real
+ * tracked file in the dotfiles repo and survives theme package updates. */
+@import url("file:///usr/share/themes/catppuccin-mocha-mauve-standard+default/gtk-4.0/gtk.css");
