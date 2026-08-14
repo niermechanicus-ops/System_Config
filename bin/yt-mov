@@ -12,21 +12,41 @@
 # track. DNxHR is an open, unencumbered ffmpeg encoder that free Resolve
 # reads natively.
 #
-# Usage: yt-mov <url> [more urls...]
+# Usage: yt-mov [-s START] [-e END] <url> [more urls...]
+#   -s START   clip start, e.g. 1:23 or 00:01:23 (default: beginning)
+#   -e END     clip end,   e.g. 4:56 or 00:04:56 (default: end of video)
+# Start/end apply to every URL passed. yt-dlp only fetches the requested
+# range where the site supports it, rather than the whole video.
 set -euo pipefail
 
 out_dir="$HOME/Videos"
 mkdir -p "$out_dir"
 
+start=""
+end=""
+while getopts "s:e:" opt; do
+    case "$opt" in
+        s) start="$OPTARG" ;;
+        e) end="$OPTARG" ;;
+        *) echo "Usage: yt-mov [-s START] [-e END] <youtube-url> [more urls...]" >&2; exit 1 ;;
+    esac
+done
+shift "$((OPTIND - 1))"
+
 if [ "$#" -eq 0 ]; then
-    echo "Usage: yt-mov <youtube-url> [more urls...]" >&2
+    echo "Usage: yt-mov [-s START] [-e END] <youtube-url> [more urls...]" >&2
     exit 1
 fi
 
 tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
-yt-dlp --merge-output-format mkv -o "${tmp_dir}/%(title)s.%(ext)s" "$@"
+section_args=()
+if [ -n "$start" ] || [ -n "$end" ]; then
+    section_args=(--download-sections "*${start:-0}-${end:-inf}" --force-keyframes-at-cuts)
+fi
+
+yt-dlp --merge-output-format mkv "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@"
 
 for f in "$tmp_dir"/*; do
     [ -f "$f" ] || continue
