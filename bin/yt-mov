@@ -67,13 +67,28 @@ if [ -n "$start" ] || [ -n "$end" ]; then
     section_args=(--download-sections "*${start:-0}-${end:-inf}" --force-keyframes-at-cuts)
 fi
 
-yt-dlp --merge-output-format mkv "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@"
+downloaded=0
+for attempt in 1 2 3; do
+    if yt-dlp --merge-output-format mkv --concurrent-fragments 8 \
+        "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@"; then
+        downloaded=1
+        break
+    fi
+    echo "yt-dlp attempt $attempt failed (often a transient token/signature" \
+        "issue) -- retrying..." >&2
+    sleep 2
+done
+[ "$downloaded" -eq 1 ] || { echo "yt-dlp failed after 3 attempts" >&2; exit 1; }
 
 for f in "$tmp_dir"/*; do
     [ -f "$f" ] || continue
     title=$(basename "${f%.*}")
     out="${out_dir}/${title}.mov"
-    ffmpeg -y -i "$f" \
+    # -hwaccel cuda offloads decode of the downloaded source (AV1/VP9/H264)
+    # to the GPU's NVDEC engine, freeing all CPU threads for the DNxHR
+    # encode below -- DNxHR itself has no hardware encoder (Avid codec,
+    # CPU-only), so this is the only part of the pipeline the GPU can help.
+    ffmpeg -y -hide_banner -loglevel warning -stats -hwaccel cuda -i "$f" \
         -c:v dnxhd -profile:v dnxhr_hq -pix_fmt yuv422p \
         -c:a pcm_s16le -ar 48000 \
         "$out"
