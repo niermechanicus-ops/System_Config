@@ -56,27 +56,97 @@ to_seconds() {
     echo "$secs"
 }
 
+# Renders a pacman-style "[####----] NN%  ETA MM:SS" bar from either of two
+# live progress formats: yt-dlp's own "[download] NN.N% ... ETA HH:MM:SS"
+# (used for plain full-video downloads), or ffmpeg's machine-readable
+# `-progress` key=value stream (used for the transcode step, and for clip
+# downloads where yt-dlp hands off to ffmpeg to seek within the source).
+# The second form needs $1=duration (seconds) to turn elapsed time into a
+# percent/ETA; pass 0 when only the first form is expected. Everything else
+# (errors, status lines) passes through untouched.
+progress_filter() {
+    local duration="$1" label="$2"
+    awk -v duration="$duration" -v label="$label" -v width=30 '
+    function fmt_eta(s,    h, m, sec) {
+        if (s == "" || s < 0) return "--:--"
+        s = int(s)
+        h = int(s / 3600); m = int((s % 3600) / 60); sec = s % 60
+        if (h > 0) return sprintf("%d:%02d:%02d", h, m, sec)
+        return sprintf("%02d:%02d", m, sec)
+    }
+    function draw(pct, eta_str,    filled, i, bar) {
+        if (pct < 0) pct = 0
+        if (pct > 100) pct = 100
+        filled = int(width * pct / 100)
+        bar = ""
+        for (i = 0; i < width; i++) bar = bar (i < filled ? "#" : "-")
+        printf("\r%s [%s] %3d%%  ETA %-8s", label, bar, int(pct), eta_str)
+        fflush()
+    }
+    BEGIN { RS = "[\r\n]+"; out_time_s = 0; speed = 0 }
+    /^out_time_us=/ { split($0, a, "="); out_time_s = a[2] / 1000000; next }
+    /^speed=/ {
+        v = $0; sub(/^speed=[[:space:]]*/, "", v); sub(/x$/, "", v)
+        speed = v + 0; next
+    }
+    /^progress=/ {
+        split($0, a, "=")
+        if (duration + 0 > 0) {
+            pct = out_time_s / duration * 100
+            eta = (speed > 0) ? (duration - out_time_s) / speed : -1
+            draw(pct, fmt_eta(eta))
+        }
+        if (a[2] == "end") printf("\n")
+        next
+    }
+    /^\[download\][[:space:]]+[0-9.]+%/ {
+        match($0, /[0-9.]+%/)
+        pct = substr($0, RSTART, RLENGTH - 1) + 0
+        eta_str = "--:--"
+        if (match($0, /ETA[[:space:]]+[0-9:]+/)) {
+            eta_str = substr($0, RSTART + 4, RLENGTH - 4)
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", eta_str)
+        }
+        draw(pct, eta_str)
+        if (pct >= 100) printf("\n")
+        next
+    }
+    # Remaining bare "key=value" lines from ffmpeg -progress (frame=,
+    # bitrate=, total_size=, ...) that we do not otherwise use -- discard
+    # quietly instead of letting them spam the terminal.
+    /^[a-zA-Z_][a-zA-Z_0-9]*=/ { next }
+    { printf("\r\033[K%s\n", $0) }
+    '
+}
+
 tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
 section_args=()
+clip_duration_s=0
 if [ -n "$start" ] || [ -n "$end" ]; then
     start_s=$(to_seconds "${start:-0}")
+    first_dur=""
     for url in "$@"; do
         dur=$(yt-dlp --print duration -- "$url" 2>/dev/null | head -1)
+        [ -n "$first_dur" ] || first_dur="$dur"
         if [[ "$dur" =~ ^[0-9]+$ ]] && [ "$start_s" -ge "$dur" ]; then
             dur_str=$(yt-dlp --print duration_string -- "$url" 2>/dev/null)
             echo "Error: start time ${start:-0} is at or past the end of $url (video is only ${dur_str})" >&2
             exit 1
         fi
     done
+    end_s=$([ -n "$end" ] && to_seconds "$end" || echo "${first_dur:-0}")
+    clip_duration_s=$((end_s - start_s))
     section_args=(--download-sections "*${start:-0}-${end:-inf}" --force-keyframes-at-cuts)
 fi
 
 downloaded=0
 for attempt in 1 2 3; do
     if yt-dlp --merge-output-format mkv --concurrent-fragments 8 \
-        "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@"; then
+        --downloader-args "ffmpeg:-loglevel error -nostats -progress pipe:1" \
+        "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@" 2>&1 \
+        | progress_filter "$clip_duration_s" "Downloading"; then
         downloaded=1
         break
     fi
@@ -90,13 +160,15 @@ for f in "$tmp_dir"/*; do
     [ -f "$f" ] || continue
     title=$(basename "${f%.*}")
     out="${out_dir}/${title}.mov"
+    src_duration_s=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$f")
+    src_duration_s=${src_duration_s%.*}
     # -hwaccel cuda offloads decode of the downloaded source (AV1/VP9/H264)
     # to the GPU's NVDEC engine, freeing all CPU threads for the DNxHR
     # encode below -- DNxHR itself has no hardware encoder (Avid codec,
     # CPU-only), so this is the only part of the pipeline the GPU can help.
-    ffmpeg -y -hide_banner -loglevel warning -stats -hwaccel cuda -i "$f" \
+    ffmpeg -y -hide_banner -loglevel warning -nostats -progress pipe:1 -hwaccel cuda -i "$f" \
         -c:v dnxhd -profile:v dnxhr_hq -pix_fmt yuv422p \
         -c:a pcm_s16le -ar 48000 \
-        "$out"
+        "$out" 2>&1 | progress_filter "$src_duration_s" "Encoding   "
     echo "Saved: $out"
 done
