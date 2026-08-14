@@ -7,6 +7,10 @@ plain-text summary meant to be pasted into a fresh Claude Code chat after a cras
 
 ## Restoring on a fresh machine
 
+0. **Reinstalling Arch itself first?** See `ARCHINSTALL.md` — it has the exact
+   `archinstall` config used originally (disk/btrfs layout, bootloader, Hyprland
+   profile, Nvidia driver choice, etc.), including a JSON file you can feed straight
+   to `archinstall --config` instead of clicking through the menu from memory.
 1. Install packages: `sudo pacman -S --needed - < .system/pacman-packages.txt`
    then the AUR ones in `.system/aur-packages.txt` (needs an AUR helper, e.g. `yay`
    — `yay -S davinci-resolve` etc.). These lists were captured with
