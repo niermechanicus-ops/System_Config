@@ -53,13 +53,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpaper")
 end)
 
--- Hide waybar (it lives on DP-3 only) whenever a window on DP-3 goes fullscreen,
--- e.g. a fullscreened YouTube video, so it doesn't sit on top of it.
-hl.on("window.fullscreen", function(w)
-	if w ~= nil and w.monitor ~= nil and w.monitor.name == "DP-3" then
-		hl.exec_cmd("pkill -SIGUSR1 waybar")
-	end
-end)
+-- Waybar runs in the "bottom" layer (see waybar/config.jsonc) so fullscreen
+-- windows naturally render over it per-workspace, without hiding it on
+-- other workspaces. No fullscreen-triggered toggle needed.
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
