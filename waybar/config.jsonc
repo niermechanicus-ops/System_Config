@@ -14,10 +14,7 @@
     "margin-right": 20,
     "output": ["DP-3"],
 
-    // Everything lives on the right by preference. The clipping this used to
-    // cause is handled in style.css via padding on the last chip, not by
-    // putting something on the left to balance it.
-    "modules-left": [],
+    "modules-left": ["custom/network"],
     "modules-center": [],
     "modules-right": [
         "custom/cpu-temp",
@@ -26,6 +23,18 @@
         "clock#date",
         "clock#time"
     ],
+
+    "custom/network": {
+        "exec": "~/.config/waybar/scripts/network.sh",
+        "return-type": "json",
+        // 5s matches the temp modules. The script only reads NetworkManager's
+        // already-cached verdict, so this is cheap — it does no probing.
+        "interval": 5,
+        "format": "{}",
+        "tooltip": true,
+        // Click straight through to the connection editor when it's down.
+        "on-click": "nm-connection-editor"
+    },
 
     "clock#date": {
         // NOTE: waybar's clock uses C++ std::chrono format specs, not full

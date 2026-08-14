@@ -54,12 +54,31 @@ window#waybar {
 #clock.time,
 #custom-cpu-temp,
 #custom-gpu-temp,
+#custom-network,
 #pulseaudio {
     background: #313244;          /* surface0 */
     border-radius: 2px;
     margin: 6px 5px;
     padding: 0 20px;
     color: #cdd6f4;
+}
+
+/* Leftmost chip on the bar — mirror the clock's outside margin on the right
+ * so both ends are held off the edge by the same amount. */
+#custom-network {
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+#custom-network.online {
+    color: #a6e3a1;               /* green */
+}
+
+#custom-network.offline {
+    color: #f38ba8;               /* red */
+    /* Tinted background as well as red text: this is the one module whose
+     * bad state should be noticeable without looking straight at it. */
+    background: #45475a;          /* surface1 */
 }
 
 /* ---- individual module colours ----------------------------------------
