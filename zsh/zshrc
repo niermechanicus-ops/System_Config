@@ -119,9 +119,24 @@ command -v fastfetch >/dev/null 2>&1 && fastfetch && echo
 #   3. zsh-autosuggestions — must come *after* syntax highlighting, or the
 #      highlighter repaints over the suggestion and it appears to vanish
 
-# Real-time completion menu as you type. Was installed but never sourced,
-# so it had been doing nothing at all.
-source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# zsh-autocomplete is DISABLED on purpose — do not re-enable without reading
+# this first.
+#
+# It was installed but never sourced (so it had never actually run). Sourcing
+# it on 2026-08-14 produced the first and only zsh SIGSEGV this machine has
+# ever recorded, within a minute, in a real kitty session. The crash stack ran
+# zle redrawhook -> zpty -> exit-hook teardown, faulting in unsetparam_pm;
+# zpty is exactly what this plugin's async engine uses
+# (Functions/Init/.autocomplete__async). Package is 25.03.19 against zsh
+# 5.9.2, i.e. well behind.
+#
+# zsh-autosuggestions below covers most of the same ground and is stable.
+#
+# To try it again, the targeted mitigation is to disable the async/zpty path
+# that crashed, by setting this BEFORE the source line:
+#     zstyle ':autocomplete:*' async no
+#     source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# Untested here — verify with `coredumpctl list` after a day of real use.
 
 # zsh-syntax-highlighting must be sourced near the end of .zshrc
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
