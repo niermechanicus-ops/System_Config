@@ -10,7 +10,7 @@
  *
  * Mocha refs: base #1e1e2e  mantle #181825  crust #11111b  text #cdd6f4
  *             surface0 #313244  surface1 #45475a  overlay0 #6c7086
- *             mauve #cba6f7  peach #fab387  green #a6e3a1  blue #89b4fa
+ *             peach #fab387  green #a6e3a1  blue #89b4fa
  *             red #f38ba8  rosewater #f5e0dc
  */
 
@@ -41,11 +41,15 @@ window#waybar {
 }
 
 /* ---- shared chip shape -------------------------------------------------
- * Every module gets the same box so the bar reads as one system. The 6px
- * vertical margin insets chips within the 58px bar; 3px horizontal is the
- * gap *between* chips.
+ * Every module gets the same box so the bar reads as one system.
+ *   margin 6px vertical -> insets the chip within the 58px bar
+ *   margin 5px horizontal -> the gap *between* adjacent chips
+ *   padding 0 20px -> breathing room inside each chip
+ *
+ * The gap between a module's icon and its value is set in config.jsonc
+ * (two spaces in each "format" string), not here — GTK CSS has no way to
+ * space the parts of a single label.
  */
-#workspaces,
 #clock.date,
 #clock.time,
 #custom-cpu-temp,
@@ -53,64 +57,14 @@ window#waybar {
 #pulseaudio {
     background: #313244;          /* surface0 */
     border-radius: 2px;
-    margin: 6px 3px;
-    padding: 0 14px;
-    color: #cdd6f4;
-}
-
-/* The outermost chips get a wider outside margin so nothing sits flush
- * against the bar edge. The right edge is what was clipping the clock. */
-#workspaces {
-    margin-left: 6px;
-    padding: 0 4px;   /* buttons supply their own padding */
-    background: transparent;
-}
-
-#clock.time {
-    margin-right: 6px;
-}
-
-/* ---- workspaces --------------------------------------------------------
- * Individual buttons rather than one chip, so the active workspace can be
- * highlighted on its own.
- */
-#workspaces button {
-    background: #313244;          /* surface0 */
-    color: #6c7086;               /* overlay0 — dim: exists but empty */
-    border-radius: 2px;
-    margin: 0 3px;
-    padding: 0 12px;
-    /* GTK draws a default focus border on buttons; remove it so the chip
-     * shape stays clean. */
-    border: none;
-}
-
-/* Has windows on it */
-#workspaces button.occupied {
-    color: #cdd6f4;               /* text */
-}
-
-/* Currently focused — the one thing on the bar that should be unmissable,
- * so it inverts rather than just recolouring. */
-#workspaces button.active {
-    background: #cba6f7;          /* mauve */
-    color: #11111b;               /* crust */
-}
-
-/* Window demanding attention on another workspace */
-#workspaces button.urgent {
-    background: #f38ba8;          /* red */
-    color: #11111b;
-}
-
-#workspaces button:hover {
-    background: #45475a;          /* surface1 */
+    margin: 6px 5px;
+    padding: 0 20px;
     color: #cdd6f4;
 }
 
 /* ---- individual module colours ----------------------------------------
  * Colour is the only thing distinguishing modules now that the separators
- * are gone, so each keeps its existing hue.
+ * are gone, so each keeps its own hue.
  */
 #custom-cpu-temp {
     color: #fab387;               /* peach */
@@ -137,7 +91,9 @@ window#waybar {
     color: #f5e0dc;               /* rosewater */
     font-weight: bold;
     /* Bold at 20px is measurably wider than the regular weight, and this is
-     * the last chip on the bar — the extra horizontal padding is what stops
-     * the trailing minute digit being clipped by the bar edge. */
-    padding: 0 18px;
+     * the last chip on the bar — the extra padding, plus the wider outside
+     * margin below, is what stops the trailing minute digit being clipped
+     * by the bar edge. */
+    padding: 0 24px;
+    margin-right: 8px;
 }

@@ -14,10 +14,10 @@
     "margin-right": 20,
     "output": ["DP-3"],
 
-    // Left/centre were both empty, which pushed every module into a single
-    // clump against the right edge (and clipped the last one). Workspaces on
-    // the left now balance the hardware/clock cluster on the right.
-    "modules-left": ["hyprland/workspaces"],
+    // Everything lives on the right by preference. The clipping this used to
+    // cause is handled in style.css via padding on the last chip, not by
+    // putting something on the left to balance it.
+    "modules-left": [],
     "modules-center": [],
     "modules-right": [
         "custom/cpu-temp",
@@ -26,16 +26,6 @@
         "clock#date",
         "clock#time"
     ],
-
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "on-click": "activate",
-        // Scrolling the bar cycles workspaces — easy to trigger by accident
-        // when reaching for the volume control, so it's off.
-        "disable-scroll": true,
-        "all-outputs": false,
-        "sort-by-number": true
-    },
 
     "clock#date": {
         // NOTE: waybar's clock uses C++ std::chrono format specs, not full
@@ -54,7 +44,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": " {text}",
+        "format": "  {text}",
         "tooltip": true
     },
 
@@ -62,13 +52,13 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰍛 {text}",
+        "format": "󰍛  {text}",
         "tooltip": true
     },
 
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": " muted",
+        "format": "{icon}  {volume}%",
+        "format-muted": "  muted",
         "format-icons": {
             "default": ["", "", ""]
         },
