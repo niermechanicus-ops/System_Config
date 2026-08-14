@@ -38,11 +38,32 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
+to_seconds() {
+    local secs=0 p
+    local old_ifs="$IFS"
+    IFS=:
+    local -a parts=($1)
+    IFS="$old_ifs"
+    for p in "${parts[@]}"; do
+        secs=$((secs * 60 + 10#$p))
+    done
+    echo "$secs"
+}
+
 tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
 section_args=()
 if [ -n "$start" ] || [ -n "$end" ]; then
+    start_s=$(to_seconds "${start:-0}")
+    for url in "$@"; do
+        dur=$(yt-dlp --print duration -- "$url" 2>/dev/null | head -1)
+        if [[ "$dur" =~ ^[0-9]+$ ]] && [ "$start_s" -ge "$dur" ]; then
+            dur_str=$(yt-dlp --print duration_string -- "$url" 2>/dev/null)
+            echo "Error: start time ${start:-0} is at or past the end of $url (video is only ${dur_str})" >&2
+            exit 1
+        fi
+    done
     section_args=(--download-sections "*${start:-0}-${end:-inf}" --force-keyframes-at-cuts)
 fi
 
