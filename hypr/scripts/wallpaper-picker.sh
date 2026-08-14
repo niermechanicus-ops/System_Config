@@ -4,6 +4,16 @@ set -euo pipefail
 wall_dir="$HOME/Documents/Wallpapers"
 state_file="$HOME/.config/hypr/hyprpaper.conf"
 
+# Thumbnail grid theme override for the image picker only (doesn't touch
+# the shared rofi theme used by drun/run/window/monitor-picker/confirm menus).
+grid_theme='
+window { width: 1100px; }
+listview { columns: 3; lines: 3; spacing: 12px; scrollbar: true; }
+element { orientation: vertical; padding: 10px; }
+element-icon { size: 300px; horizontal-align: 0.5; }
+element-text { horizontal-align: 0.5; }
+'
+
 mapfile -t images < <(find "$wall_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -printf "%f\n" | sort)
 
 if [ "${#images[@]}" -eq 0 ]; then
@@ -11,40 +21,86 @@ if [ "${#images[@]}" -eq 0 ]; then
     exit 1
 fi
 
-chosen=$(printf "%s\n" "${images[@]}" | rofi -dmenu -i -p "Wallpaper")
-[ -z "${chosen:-}" ] && exit 0
-img_path="$wall_dir/$chosen"
-
 mapfile -t monitors < <(hyprctl monitors | awk '/^Monitor /{print $2}')
-target=$(printf "%s\nAll monitors\n" "${monitors[@]}" | rofi -dmenu -i -p "Apply to")
-[ -z "${target:-}" ] && exit 0
 
+# Snapshot the real current state up front so a cancelled/reverted preview
+# always has something correct to restore.
 declare -A current
 while read -r mon; do
     line=$(hyprctl hyprpaper listactive 2>/dev/null | grep "^$mon: " || true)
     current["$mon"]="${line#"$mon: "}"
 done < <(printf "%s\n" "${monitors[@]}")
+declare -A original=()
+for mon in "${monitors[@]}"; do
+    original["$mon"]="${current[$mon]:-}"
+done
 
-if [ "$target" = "All monitors" ]; then
-    for mon in "${monitors[@]}"; do
-        hyprctl hyprpaper wallpaper "$mon,$img_path" >/dev/null
-        current["$mon"]="$img_path"
-    done
-else
-    hyprctl hyprpaper wallpaper "$target,$img_path" >/dev/null
-    current["$target"]="$img_path"
-fi
+apply_to() {
+    local target="$1" path="$2"
+    if [ "$target" = "All monitors" ]; then
+        for mon in "${monitors[@]}"; do
+            hyprctl hyprpaper wallpaper "$mon,$path" >/dev/null
+            current["$mon"]="$path"
+        done
+    else
+        hyprctl hyprpaper wallpaper "$target,$path" >/dev/null
+        current["$target"]="$path"
+    fi
+}
 
-{
+revert() {
     for mon in "${monitors[@]}"; do
-        if [ -n "${current[$mon]:-}" ]; then
-            echo "wallpaper {"
-            echo "    monitor = $mon"
-            echo "    path = ${current[$mon]}"
-            echo "}"
-            echo
+        if [ -n "${original[$mon]:-}" ] && [ "${current[$mon]:-}" != "${original[$mon]}" ]; then
+            hyprctl hyprpaper wallpaper "$mon,${original[$mon]}" >/dev/null
+            current["$mon"]="${original[$mon]}"
         fi
     done
-} > "$state_file"
+}
 
-notify-send -i "$img_path" "Wallpaper set" "$chosen -> $target"
+persist() {
+    {
+        echo "splash = false"
+        echo
+        for mon in "${monitors[@]}"; do
+            if [ -n "${current[$mon]:-}" ]; then
+                echo "wallpaper {"
+                echo "    monitor = $mon"
+                echo "    path = ${current[$mon]}"
+                echo "}"
+                echo
+            fi
+        done
+    } > "$state_file"
+}
+
+while true; do
+    chosen=$(
+        for img in "${images[@]}"; do
+            printf '%s\x00icon\x1f%s\n' "$img" "$wall_dir/$img"
+        done | rofi -dmenu -i -show-icons -p "Wallpaper" -theme-str "$grid_theme"
+    )
+    [ -z "${chosen:-}" ] && exit 0
+    img_path="$wall_dir/$chosen"
+
+    target=$(printf "%s\nAll monitors\n" "${monitors[@]}" | rofi -dmenu -i -p "Preview on")
+    [ -z "${target:-}" ] && exit 0
+
+    apply_to "$target" "$img_path"
+
+    decision=$(printf "Keep\nTry another wallpaper\nRevert\n" | rofi -dmenu -i -p "Applied — check both monitors" -mesg "$chosen -> $target")
+
+    case "$decision" in
+        Keep)
+            persist
+            notify-send -i "$img_path" "Wallpaper set" "$chosen -> $target"
+            exit 0
+            ;;
+        "Try another wallpaper")
+            continue
+            ;;
+        *)
+            revert
+            exit 0
+            ;;
+    esac
+done
