@@ -1,54 +1,143 @@
+/* Waybar — Catppuccin Mocha.
+ *
+ * Structure: a solid bar carrying inset "chips", one per module. The chips
+ * replace the old "|" separator modules, which were doing the work of visual
+ * grouping with a literal pipe character.
+ *
+ * Corner radius is 2px throughout to match decoration.rounding = 2 in
+ * hyprland.lua — the sharp-edged look is deliberate, so chips stay square
+ * rather than becoming pills, and read as chips via background instead.
+ *
+ * Mocha refs: base #1e1e2e  mantle #181825  crust #11111b  text #cdd6f4
+ *             surface0 #313244  surface1 #45475a  overlay0 #6c7086
+ *             mauve #cba6f7  peach #fab387  green #a6e3a1  blue #89b4fa
+ *             red #f38ba8  rosewater #f5e0dc
+ */
+
 * {
     font-family: "JetBrainsMono Nerd Font", monospace;
     font-size: 20px;
+    /* Stops GTK reserving extra vertical space per widget, which otherwise
+     * makes chips taller than their text and throws off centring. */
     min-height: 0;
 }
 
 tooltip {
     font-family: "JetBrainsMono Nerd Font", monospace;
+    background: #181825;
+    border: 1px solid #45475a;
+    border-radius: 2px;
+}
+
+tooltip label {
+    color: #cdd6f4;
+    padding: 4px;
 }
 
 window#waybar {
     background: rgba(30, 30, 46, 0.92); /* base */
-    color: #cdd6f4;                     /* text */
-    border-radius: 2px; /* matches decoration.rounding in hyprland.lua */
+    color: #cdd6f4;
+    border-radius: 2px;
 }
 
-#clock-date,
-#clock-time,
+/* ---- shared chip shape -------------------------------------------------
+ * Every module gets the same box so the bar reads as one system. The 6px
+ * vertical margin insets chips within the 58px bar; 3px horizontal is the
+ * gap *between* chips.
+ */
+#workspaces,
+#clock.date,
+#clock.time,
 #custom-cpu-temp,
 #custom-gpu-temp,
 #pulseaudio {
-    padding: 0 8px;
+    background: #313244;          /* surface0 */
+    border-radius: 2px;
+    margin: 6px 3px;
+    padding: 0 14px;
     color: #cdd6f4;
 }
 
-#custom-separator {
-    padding: 0 6px;
-    color: #45475a; /* surface1 */
+/* The outermost chips get a wider outside margin so nothing sits flush
+ * against the bar edge. The right edge is what was clipping the clock. */
+#workspaces {
+    margin-left: 6px;
+    padding: 0 4px;   /* buttons supply their own padding */
+    background: transparent;
 }
 
-#clock-date {
+#clock.time {
+    margin-right: 6px;
+}
+
+/* ---- workspaces --------------------------------------------------------
+ * Individual buttons rather than one chip, so the active workspace can be
+ * highlighted on its own.
+ */
+#workspaces button {
+    background: #313244;          /* surface0 */
+    color: #6c7086;               /* overlay0 — dim: exists but empty */
+    border-radius: 2px;
+    margin: 0 3px;
+    padding: 0 12px;
+    /* GTK draws a default focus border on buttons; remove it so the chip
+     * shape stays clean. */
+    border: none;
+}
+
+/* Has windows on it */
+#workspaces button.occupied {
+    color: #cdd6f4;               /* text */
+}
+
+/* Currently focused — the one thing on the bar that should be unmissable,
+ * so it inverts rather than just recolouring. */
+#workspaces button.active {
+    background: #cba6f7;          /* mauve */
+    color: #11111b;               /* crust */
+}
+
+/* Window demanding attention on another workspace */
+#workspaces button.urgent {
+    background: #f38ba8;          /* red */
+    color: #11111b;
+}
+
+#workspaces button:hover {
+    background: #45475a;          /* surface1 */
     color: #cdd6f4;
 }
 
-#clock-time {
-    color: #f5e0dc; /* rosewater */
-    font-weight: bold;
-}
-
+/* ---- individual module colours ----------------------------------------
+ * Colour is the only thing distinguishing modules now that the separators
+ * are gone, so each keeps its existing hue.
+ */
 #custom-cpu-temp {
-    color: #fab387; /* peach */
+    color: #fab387;               /* peach */
 }
 
 #custom-gpu-temp {
-    color: #a6e3a1; /* green */
+    color: #a6e3a1;               /* green */
 }
 
 #pulseaudio {
-    color: #89b4fa; /* blue */
+    color: #89b4fa;               /* blue */
 }
 
 #pulseaudio.muted {
-    color: #f38ba8; /* red */
+    background: #45475a;          /* surface1 — muted reads as inactive */
+    color: #f38ba8;               /* red */
+}
+
+#clock.date {
+    color: #cdd6f4;               /* text */
+}
+
+#clock.time {
+    color: #f5e0dc;               /* rosewater */
+    font-weight: bold;
+    /* Bold at 20px is measurably wider than the regular weight, and this is
+     * the last chip on the bar — the extra horizontal padding is what stops
+     * the trailing minute digit being clipped by the bar edge. */
+    padding: 0 18px;
 }

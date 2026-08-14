@@ -1,24 +1,46 @@
 {
     "layer": "bottom",
     "position": "top",
+    // Kept at 58 deliberately — this is a 32" 4K panel at scale 1, where a
+    // shorter bar reads as cramped. Chips are inset within it via CSS.
     "height": 58,
+    // Chip spacing is done with margins in style.css instead, so that the
+    // gap between chips and the gap at the bar's edge can differ.
     "spacing": 0,
+    // Matches gaps_out = 20 in hyprland.lua, so the bar lines up with the
+    // window edges below it rather than floating on its own grid.
     "margin-top": 8,
     "margin-left": 20,
     "margin-right": 20,
     "output": ["DP-3"],
 
-    "modules-left": [],
+    // Left/centre were both empty, which pushed every module into a single
+    // clump against the right edge (and clipped the last one). Workspaces on
+    // the left now balance the hardware/clock cluster on the right.
+    "modules-left": ["hyprland/workspaces"],
     "modules-center": [],
     "modules-right": [
-        "custom/cpu-temp", "custom/separator",
-        "custom/gpu-temp", "custom/separator",
-        "pulseaudio", "custom/separator",
-        "clock#date", "custom/separator",
+        "custom/cpu-temp",
+        "custom/gpu-temp",
+        "pulseaudio",
+        "clock#date",
         "clock#time"
     ],
 
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        // Scrolling the bar cycles workspaces — easy to trigger by accident
+        // when reaching for the volume control, so it's off.
+        "disable-scroll": true,
+        "all-outputs": false,
+        "sort-by-number": true
+    },
+
     "clock#date": {
+        // NOTE: waybar's clock uses C++ std::chrono format specs, not full
+        // strftime — %-d (unpadded day) is NOT supported and throws
+        // "chrono format error". Use %d.
         "format": "{:%A, %B %d}",
         "tooltip": false
     },
@@ -32,7 +54,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": " {text}",
+        "format": " {text}",
         "tooltip": true
     },
 
@@ -40,25 +62,20 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": " {text}",
+        "format": "󰍛 {text}",
         "tooltip": true
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": " muted",
+        "format-muted": " muted",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["", "", ""]
         },
         "tooltip": false,
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
         "scroll-step": 5
-    },
-
-    "custom/separator": {
-        "format": "|",
-        "tooltip": false
     }
 }
