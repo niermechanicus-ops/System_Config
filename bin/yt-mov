@@ -12,11 +12,14 @@
 # track. DNxHR is an open, unencumbered ffmpeg encoder that free Resolve
 # reads natively.
 #
-# Usage: yt-mov [-s START] [-e END] <url> [more urls...]
+# Usage: yt-mov [-s START] [-e END] [url ...]
 #   -s START   clip start, e.g. 1:23 or 00:01:23 (default: beginning)
 #   -e END     clip end,   e.g. 4:56 or 00:04:56 (default: end of video)
 # Start/end apply to every URL passed. yt-dlp only fetches the requested
 # range where the site supports it, rather than the whole video.
+#
+# Run with no arguments at all for an interactive prompt (URL, then
+# optional start/end times) instead of remembering the flags.
 set -euo pipefail
 
 out_dir="$HOME/Videos"
@@ -34,8 +37,11 @@ done
 shift "$((OPTIND - 1))"
 
 if [ "$#" -eq 0 ]; then
-    echo "Usage: yt-mov [-s START] [-e END] <youtube-url> [more urls...]" >&2
-    exit 1
+    read -rp "YouTube URL: " url || true
+    [ -n "$url" ] || { echo "No URL given." >&2; exit 1; }
+    set -- "$url"
+    [ -n "$start" ] || read -rp "Start time (e.g. 1:23, Enter for beginning): " start || true
+    [ -n "$end" ]   || read -rp "End time (e.g. 4:56, Enter for end of video): " end || true
 fi
 
 to_seconds() {
