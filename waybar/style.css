@@ -67,7 +67,6 @@ window#waybar {
  * so both ends are held off the edge by the same amount. */
 #custom-network {
     margin-left: 8px;
-    font-weight: bold;
 }
 
 #custom-network.online {
@@ -108,11 +107,10 @@ window#waybar {
 
 #clock.time {
     color: #f5e0dc;               /* rosewater */
-    font-weight: bold;
-    /* Bold at 20px is measurably wider than the regular weight, and this is
-     * the last chip on the bar — the extra padding, plus the wider outside
-     * margin below, is what stops the trailing minute digit being clipped
-     * by the bar edge. */
-    padding: 0 24px;
+    /* Every chip is now the same family, size and weight — the modules are
+     * distinguished by colour alone. The extra padding this chip used to
+     * carry was compensating for bold being wider; at regular weight the
+     * shared 20px is enough, and the outside margin keeps the last digit
+     * clear of the bar edge. */
     margin-right: 8px;
 }
