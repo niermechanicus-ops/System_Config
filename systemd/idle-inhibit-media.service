@@ -1,0 +1,20 @@
+[Unit]
+Description=Hold a systemd idle inhibitor while media is playing
+Documentation=file:%h/Documents/dotfiles/bin/idle-inhibit-media
+# playerctld owns the MPRIS bus name this watches. It is D-Bus activated, so
+# this is ordering only — no Requires, or a session without it would refuse
+# to start the unit at all.
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/idle-inhibit-media
+# playerctl --follow exits when the last player goes away; that is the normal
+# path out of the script, not a failure, so restart unconditionally.
+Restart=always
+RestartSec=5s
+# Nothing in here should ever be the reason a session fails to come up.
+Slice=background.slice
+
+[Install]
+WantedBy=graphical-session.target

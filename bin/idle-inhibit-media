@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Holds a systemd idle inhibitor for as long as any MPRIS player is playing,
+# so hypridle's 600s timer never locks the session mid-film or mid-album.
+#
+# Why systemd-inhibit: hypridle (0.1.8) checks logind's idle inhibitors on
+# every idle tick and skips the timeout while one is held — see its
+# general:ignore_systemd_inhibit option, which we leave at the default false.
+# That makes this daemon completely decoupled from hypridle's config; nothing
+# in hypridle.conf needs to know this exists.
+#
+# What this does NOT need to cover: mpv and Firefox video already hold a
+# Wayland idle inhibitor (zwp_idle_inhibitor_v1) while playing, which Hyprland
+# honours by simply not reporting the session idle. This daemon is for
+# everything that only speaks MPRIS — audio-only playback, players without a
+# visible surface, Firefox tabs in the background.
+#
+# Run as a systemd --user service (systemd/idle-inhibit-media.service).
+set -uo pipefail
+
+INHIBITOR_PID=""
+
+is_playing() {
+    playerctl --all-players status 2>/dev/null | grep -qx 'Playing'
+}
+
+acquire() {
+    # Already holding a live inhibitor? Nothing to do.
+    if [ -n "$INHIBITOR_PID" ] && kill -0 "$INHIBITOR_PID" 2>/dev/null; then
+        return
+    fi
+    # `sleep infinity` is the inhibitor's lifetime — logind releases the lock
+    # the moment this child dies, so releasing is just a kill.
+    systemd-inhibit \
+        --what=idle \
+        --who="idle-inhibit-media" \
+        --why="Media is playing" \
+        --mode=block \
+        sleep infinity &
+    INHIBITOR_PID=$!
+}
+
+release() {
+    [ -n "$INHIBITOR_PID" ] || return
+    kill "$INHIBITOR_PID" 2>/dev/null
+    wait "$INHIBITOR_PID" 2>/dev/null
+    INHIBITOR_PID=""
+}
+
+sync_state() {
+    if is_playing; then acquire; else release; fi
+}
+
+# Drop the lock on the way out, including on `systemctl --user stop`, so a
+# restart can never strand an inhibitor and wedge the lock screen off.
+trap 'release; exit 0' TERM INT
+trap release EXIT
+
+# Evaluate once up front: --follow only reports *changes*, so without this a
+# service restart during playback would sit idle until the next track.
+sync_state
+
+# Event-driven rather than polled. --follow emits a line per status change on
+# any player; the payload is deliberately ignored, because with several
+# players a "Paused" from one says nothing about the others — is_playing()
+# re-reads the whole set instead.
+#
+# Fed by process substitution, NOT a pipe: a piped `while` loop runs in a
+# subshell, so every INHIBITOR_PID it recorded would be lost to the parent
+# and the EXIT trap would have nothing to release.
+#
+# --follow exits when the last player disappears. That's fine: the unit is
+# Restart=always, and there is nothing to inhibit with no players around.
+while IFS= read -r _; do
+    sync_state
+done < <(playerctl --all-players --follow status 2>/dev/null)
+
+# Reached only when --follow ended. Release before systemd restarts us.
+release
