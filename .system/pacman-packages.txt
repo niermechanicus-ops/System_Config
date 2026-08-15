@@ -1,4 +1,6 @@
+7zip
 amd-ucode
+ark
 base
 base-devel
 bluez
@@ -10,7 +12,9 @@ dunst
 efibootmgr
 fastfetch
 fd
+ffmpegthumbs
 firefox
+fzf
 gcc
 git
 grim
@@ -21,6 +25,7 @@ hypridle
 hyprland
 hyprlock
 hyprpaper
+kdegraphics-thumbnailers
 kitty
 lazygit
 libnotify
@@ -29,6 +34,8 @@ libva-nvidia-driver
 linux
 linux-firmware
 make
+man-db
+man-pages
 mkinitcpio
 mpv
 nano
@@ -40,12 +47,14 @@ noto-fonts-emoji
 nvidia-open
 obs-studio
 opencl-nvidia
+pacman-contrib
 papirus-icon-theme
 pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
 plasma-integration
+playerctl
 polkit-kde-agent
 qt5-wayland
 qt6-wayland
@@ -58,6 +67,7 @@ steam
 sudo
 swayimg
 ttf-jetbrains-mono-nerd
+unrar
 unzip
 uwsm
 vim
@@ -72,6 +82,7 @@ xdg-desktop-portal-hyprland
 xdg-utils
 yazi
 yt-dlp
+zoxide
 zram-generator
 zsh
 zsh-autocomplete
