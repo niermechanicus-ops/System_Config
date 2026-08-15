@@ -235,6 +235,13 @@ hl.config({
 		force_default_wallpaper = 0, -- Disable the anime mascot wallpapers
 		disable_hyprland_logo = true, -- Disables the random hyprland logo / anime girl background
 		disable_splash_rendering = true, -- Disables the random splash text overlay
+
+		-- Wake the displays on any input, independent of hypridle's on-resume.
+		-- hypridle already dispatches `dpms on` when it sees activity, but these
+		-- let the compositor light the panels itself the instant an event lands,
+		-- so a mouse nudge never leaves the screen dark waiting on the daemon.
+		mouse_move_enables_dpms = true,
+		key_press_enables_dpms = true,
 	},
 })
 
