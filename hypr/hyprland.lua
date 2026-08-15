@@ -323,6 +323,10 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 
+-- ALT+ENTER toggles fullscreen on the focused window (classic game/WM behaviour,
+-- used mainly for FF7 via 7th Heaven -- see the ff7-fullscreen window rule below)
+hl.bind("ALT + RETURN", hl.dsp.window.fullscreen())
+
 -- Custom launcher/app binds
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("rofi -show drun"))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
@@ -480,4 +484,28 @@ hl.window_rule({
 
 	move = "20 monitor_h-120",
 	float = true,
+})
+
+-- FF7 via 7th Heaven: open fullscreen on the 4K main monitor.
+-- The game runs under Proton/XWayland as ff7_en.exe (7th Heaven launches the
+-- classic 32-bit exe from ff7/workingdir, not the 64-bit FFVII.exe). FFNx is
+-- set to borderless 3840x2160 in that folder's FFNx.toml; this rule pins it to
+-- DP-3 so it can't land on the 1080p panel. ALT+ENTER toggles fullscreen.
+hl.window_rule({
+	name = "ff7-fullscreen",
+	match = { class = "(?i)^ff7_en\\.exe$" },
+
+	monitor = "DP-3",
+	fullscreen = true,
+})
+
+-- 7th Heaven's own manager window (WPF under Proton): keep it floating and on
+-- the main monitor rather than tiling into the game's workspace.
+hl.window_rule({
+	name = "seventh-heaven-manager",
+	match = { class = "(?i)^7th ?heaven\\.exe$" },
+
+	monitor = "DP-3",
+	float = true,
+	center = true,
 })
