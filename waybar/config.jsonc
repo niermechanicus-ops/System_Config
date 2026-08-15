@@ -53,7 +53,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "  {text}",
+        "format": "  {text}",
         "tooltip": true
     },
 
@@ -61,7 +61,7 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰍛  {text}",
+        "format": "󰢮  {text}",
         "tooltip": true
     },
 
