@@ -71,8 +71,12 @@ window#waybar {
     margin-left: 8px;
 }
 
+/* Same blue as the idle temperature chips and the volume chip. With this the
+ * bar has one colour language rather than a palette: blue is "fine", orange is
+ * "warm", red is "something is wrong". Nothing on the bar is coloured merely to
+ * tell it apart from its neighbour any more. */
 #custom-network.online {
-    color: #4eba65;               /* green */
+    color: #b1b9f9;               /* blue */
 }
 
 #custom-network.offline {
