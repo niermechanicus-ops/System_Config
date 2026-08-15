@@ -111,6 +111,50 @@ export PATH="$HOME/.local/bin:$PATH"
 
 command -v fastfetch >/dev/null 2>&1 && fastfetch && echo
 
+# ---- fzf + zoxide ----
+#
+# Sourced BEFORE zsh-syntax-highlighting below, deliberately: both install
+# their own ZLE widgets (fzf rebinds ^R / ^T / M-c), and the highlighter works
+# by wrapping every widget that exists when *it* is sourced. Anything bound
+# after it never gets wrapped, and typing in that widget renders unhighlighted.
+#
+# Both blocks are guarded on the binary so a fresh clone of this repo still
+# gives a working shell before `pacman -S fzf zoxide` has been run.
+
+if command -v fzf >/dev/null 2>&1; then
+    # One subprocess, not two: `fzf --zsh` (>= 0.48) emits key-bindings and
+    # completion together. The fallback is the older pair of shipped files,
+    # for the case where this dotfiles repo lands on an ancient fzf.
+    _fzf_init="$(fzf --zsh 2>/dev/null)"
+    if [ -n "$_fzf_init" ]; then
+        eval "$_fzf_init"
+    else
+        [ -r /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+        [ -r /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+    fi
+    unset _fzf_init
+
+    # fd rather than find, for ^T and M-c: it honours .gitignore, skips .git,
+    # and is already installed. --strip-cwd-prefix drops the leading "./".
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git --strip-cwd-prefix'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git --strip-cwd-prefix'
+
+    # Catppuccin Mocha, same palette as waybar/style.css and kitty.
+    export FZF_DEFAULT_OPTS="\
+--height 40% --layout=reverse --border=none \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a"
+fi
+
+# `z <partial>` jumps to the best-matching directory you've actually visited,
+# `zi` picks from a list interactively (which uses fzf, hence the order).
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
 # ---- completion / suggestion / highlighting plugins ----
 #
 # Load order below is not arbitrary and should not be shuffled:
