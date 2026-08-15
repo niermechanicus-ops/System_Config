@@ -86,12 +86,30 @@ window#waybar {
  * Colour is the only thing distinguishing modules now that the separators
  * are gone, so each keeps its own hue.
  */
-#custom-cpu-temp {
+/* The two temperature chips are the exception to "one hue per module": their
+ * colour reports state instead of identity. Both share the same three steps so
+ * a glance across the pair compares like with like, even though the numeric
+ * thresholds behind them differ (see the scripts — 75/88 for the CPU,
+ * 78/86 for the GPU, since a 78°C GPU is unremarkable and a 78°C CPU is not).
+ *
+ * Idle is the same blue as the volume chip, deliberately: it puts both sensors
+ * in the "nothing to see here" state alongside the rest of the bar, so orange
+ * and red are the only colours on the bar that ever mean "look at me".
+ */
+#custom-cpu-temp.normal,
+#custom-gpu-temp.normal {
+    color: #b1b9f9;               /* blue — same as #pulseaudio */
+}
+
+#custom-cpu-temp.warm,
+#custom-gpu-temp.warm {
     color: #d77757;               /* Claude orange */
 }
 
-#custom-gpu-temp {
-    color: #4eba65;               /* green */
+#custom-cpu-temp.hot,
+#custom-gpu-temp.hot {
+    color: #ff6b80;               /* red */
+    background: #45475a;          /* surface1 — same treatment as a muted sink */
 }
 
 #pulseaudio {
