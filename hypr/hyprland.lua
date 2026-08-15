@@ -52,6 +52,29 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("hypridle")
+
+	-- dunst MUST be launched here rather than left to D-Bus activation.
+	--
+	-- plasma-workspace (pulled in by plasma-integration, which we need for
+	-- kdeglobals theming) ships a service file claiming the same bus name,
+	-- org.freedesktop.Notifications, pointing at `plasma_waitforname`. On a
+	-- session with two claimants dbus-broker keeps exactly one and logs
+	-- "Ignoring duplicate name ... org.knopwob.dunst.service" — plasma's won,
+	-- so every notify-send blocked for 25s waiting on a plasmashell that never
+	-- starts in this session. Starting dunst eagerly means it already owns the
+	-- name and nothing is ever activated to contest it.
+	--
+	-- ~/.local/share/dbus-1/services/org.knopwob.dunst.service backs this up
+	-- for the case where something asks before this line has run: the user
+	-- service dir is searched ahead of /usr/share, so dunst wins there too.
+	hl.exec_cmd("dunst")
+
+	-- Authentication agent for polkit. Without one, polkitd has nowhere to
+	-- send an auth request, so anything needing elevation from the GUI
+	-- (Dolphin's admin actions, nm-connection-editor writing a system
+	-- connection, disk tools) fails with no prompt and no error at all.
+	-- The system polkitd daemon is NOT this — it's the arbiter, not the UI.
+	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
 end)
 
 -- Waybar runs in the "bottom" layer (see waybar/config.jsonc) so fullscreen

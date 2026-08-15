@@ -37,6 +37,12 @@ link zsh/zshrc          "$HOME/.zshrc"
 link bashrc            "$HOME/.bashrc"
 link starship.toml        "$HOME/.config/starship.toml"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
+link bin/idle-inhibit-media   "$HOME/.local/bin/idle-inhibit-media"
+link systemd/idle-inhibit-media.service "$HOME/.config/systemd/user/idle-inhibit-media.service"
+
+# Takes priority over plasma-workspace's claim on the notification bus name,
+# which would otherwise leave notify-send hanging. See the file's own comment.
+link dbus/org.knopwob.dunst.service "$HOME/.local/share/dbus-1/services/org.knopwob.dunst.service"
 
 # obs-studio only symlinks its themes subdir; the rest of ~/.config/obs-studio
 # is app state and shouldn't be managed here.

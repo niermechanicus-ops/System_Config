@@ -1,0 +1,14 @@
+[D-BUS Service]
+# Overrides /usr/share/dbus-1/services/org.kde.plasma.Notifications.service.
+#
+# plasma-workspace claims org.freedesktop.Notifications and points it at
+# `plasma_waitforname`, which blocks forever waiting for a plasmashell that
+# never runs in a Hyprland session — so notify-send just timed out. D-Bus
+# searches $XDG_DATA_HOME/dbus-1/services before /usr/share, so this file
+# wins, and it survives plasma-workspace upgrades (editing the packaged
+# service file would not).
+#
+# Belt and braces: hyprland.lua also starts dunst at session start, so in
+# practice the name is already owned before anything can activate it.
+Name=org.freedesktop.Notifications
+Exec=/usr/bin/dunst
