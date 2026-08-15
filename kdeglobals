@@ -1,6 +1,28 @@
+# Catppuccin Mocha (Mauve accent) for Qt/KDE apps — Dolphin, Ark, dialogs.
+#
+# The [Colors:*] blocks below are NOT redundant with
+# color-schemes/CatppuccinMochaMauve.colors. KDE apps read their palette from
+# kdeglobals itself; `ColorScheme=` is only a label recording which scheme was
+# applied. Applying a scheme (System Settings / plasma-apply-colorscheme)
+# copies the .colors sections into this file — without that step the app falls
+# back to built-in Breeze defaults, which is why Dolphin's file view rendered
+# white while its toolbar and sidebar were dark.
+#
+# Keep this file and color-schemes/CatppuccinMochaMauve.colors in sync; the
+# .colors file is what makes the scheme selectable by name, this is what
+# actually paints.
+#
+# Mocha refs: base #1e1e2e (30,30,46)   mantle #181825 (24,24,37)
+#             crust #11111b (17,17,27)  surface0 #313244 (49,50,68)
+#             surface1 #45475a (69,71,90)  text #cdd6f4 (205,214,244)
+#             subtext0 #a6adc8 (166,173,200)  mauve #cba6f7 (203,166,247)
+#             peach #fab387  green #a6e3a1  red #f38ba8  yellow #f9e2af
+
 [General]
 ColorScheme=CatppuccinMochaMauve
 Name=Catppuccin Mocha Mauve
+accentActiveTitlebar=false
+shadeSortColumn=true
 font=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
 fixed=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
 toolBarFont=JetBrainsMono Nerd Font,10,-1,5,50,0,0,0,0,0
@@ -11,3 +33,133 @@ Theme=Papirus-Dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+contrast=4
+
+# The file-list / icon-grid background. This is the one that was missing.
+[Colors:View]
+BackgroundNormal=30, 30, 46
+BackgroundAlternate=24, 24, 37
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Window]
+BackgroundNormal=24, 24, 37
+BackgroundAlternate=17, 17, 27
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Button]
+BackgroundNormal=49, 50, 68
+BackgroundAlternate=203, 166, 247
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Selection]
+BackgroundNormal=203, 166, 247
+BackgroundAlternate=203, 166, 247
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=17, 17, 27
+ForegroundInactive=17, 17, 27
+ForegroundLink=17, 17, 27
+ForegroundNegative=17, 17, 27
+ForegroundNeutral=17, 17, 27
+ForegroundNormal=17, 17, 27
+ForegroundPositive=17, 17, 27
+ForegroundVisited=17, 17, 27
+
+[Colors:Tooltip]
+BackgroundNormal=30, 30, 46
+BackgroundAlternate=17, 17, 27
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Complementary]
+BackgroundNormal=24, 24, 37
+BackgroundAlternate=17, 17, 27
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Header]
+BackgroundNormal=24, 24, 37
+BackgroundAlternate=17, 17, 27
+DecorationFocus=203, 166, 247
+DecorationHover=69, 71, 90
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=203, 166, 247
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[WM]
+activeBackground=30, 30, 46
+activeBlend=205, 214, 244
+activeForeground=205, 214, 244
+inactiveBackground=17, 17, 27
+inactiveBlend=166, 173, 200
+inactiveForeground=166, 173, 200
+
+# Inactive windows get desaturated rather than dimmed to a different hue, so a
+# background Dolphin still reads as Mocha and not as a washed-out grey.
+[ColorEffects:Inactive]
+Enable=true
+ChangeSelectionColor=false
+Color=30, 30, 46
+ColorAmount=0.5
+ColorEffect=3
+ContrastAmount=0
+ContrastEffect=0
+IntensityAmount=0
+IntensityEffect=0
+
+[ColorEffects:Disabled]
+Color=30, 30, 46
+ColorAmount=0.30000000000000004
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=0
+IntensityAmount=-1
+IntensityEffect=0
