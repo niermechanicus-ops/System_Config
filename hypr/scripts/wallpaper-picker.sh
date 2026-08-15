@@ -27,7 +27,7 @@ listview { columns: 3; lines: 2; spacing: 10px; scrollbar: false; }
 element { orientation: vertical; padding: 6px; border-radius: 10px; spacing: 4px; }
 element-icon { size: 600px; horizontal-align: 0.5; }
 element-text { horizontal-align: 0.5; }
-element selected.normal { background-color: #313244; text-color: #cba6f7; }
+element selected.normal { background-color: #313244; text-color: #af87ff; }
 '
 
 mapfile -t images < <(find "$wall_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -printf "%f\n" | sort)

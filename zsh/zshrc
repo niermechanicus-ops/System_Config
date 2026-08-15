@@ -143,9 +143,9 @@ if command -v fzf >/dev/null 2>&1; then
     # Catppuccin Mocha, same palette as waybar/style.css and kitty.
     export FZF_DEFAULT_OPTS="\
 --height 40% --layout=reverse --border=none \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f59575,hl:#ff6b80 \
+--color=fg:#cdd6f4,header:#ff6b80,info:#af87ff,pointer:#f59575 \
+--color=marker:#b1b9f9,fg+:#cdd6f4,prompt:#af87ff,hl+:#ff6b80 \
 --color=selected-bg:#45475a"
 fi
 

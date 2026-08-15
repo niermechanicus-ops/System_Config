@@ -19,9 +19,9 @@ poweroff_entry="  Power Off"
 theme_str='
 * {
     umber-bg:   #1e1b19f5;  /* warm-shifted Mocha base                  */
-    umber-sel:  #44251a;    /* deep umber, Claude orange toward mantle  */
-    umber-line: #623423;    /* one step up, for the frame               */
-    sel-fg:     #f5e0dc;    /* Catppuccin rosewater, opaque             */
+    umber-sel:  #402319;    /* deep umber, Claude orange toward mantle  */
+    umber-line: #5c3122;    /* one step up, for the frame               */
+    sel-fg:     #f59575;    /* Claude shimmer orange, opaque            */
 }
 
 window {

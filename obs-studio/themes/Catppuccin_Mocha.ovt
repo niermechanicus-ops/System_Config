@@ -7,20 +7,20 @@
 }
 
 @OBSThemeVars {
-    --ctp_rosewater: #f5e0dc;
-    --ctp_flamingo: #f2cdcd;
-    --ctp_pink: #f5c2e7;
-    --ctp_mauve: #cba6f7;
-    --ctp_red: #f38ba8;
-    --ctp_maroon: #eba0ac;
-    --ctp_peach: #e57e5a;   /* Claude orange, not Catppuccin peach */
-    --ctp_yellow: #f9e2af;
-    --ctp_green: #a6e3a1;
-    --ctp_teal: #94e2d5;
-    --ctp_sky: #89dceb;
-    --ctp_sapphire: #74c7ec;
-    --ctp_blue: #89b4fa;
-    --ctp_lavender: #b4befe;
+    --ctp_rosewater: #f59575;
+    --ctp_flamingo: #f59575;
+    --ctp_pink: #fd5db1;
+    --ctp_mauve: #af87ff;
+    --ctp_red: #ff6b80;
+    --ctp_maroon: #ff6b80;
+    --ctp_peach: #d77757;   /* Claude orange, not Catppuccin peach */
+    --ctp_yellow: #ffc107;
+    --ctp_green: #4eba65;
+    --ctp_teal: #48968c;
+    --ctp_sky: #48968c;
+    --ctp_sapphire: #6a9bcc;
+    --ctp_blue: #b1b9f9;
+    --ctp_lavender: #b1b9f9;
     --ctp_text: #cdd6f4;
     --ctp_subtext1: #bac2de;
     --ctp_subtext0: #a6adc8;
@@ -42,8 +42,8 @@
  * Latte adds lightness for contrast on the light track background.
  */
 VolumeMeter {
-    qproperty-foregroundNominalColor: #6fd266;
-    qproperty-foregroundWarningColor: #f7853f;
-    qproperty-foregroundErrorColor:   #ec4675;
+    qproperty-foregroundNominalColor: #4eba65;
+    qproperty-foregroundWarningColor: #ffc107;
+    qproperty-foregroundErrorColor:   #ff6b80;
 }
 

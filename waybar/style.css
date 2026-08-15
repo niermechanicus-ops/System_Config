@@ -8,10 +8,12 @@
  * hyprland.lua — the sharp-edged look is deliberate, so chips stay square
  * rather than becoming pills, and read as chips via background instead.
  *
- * Mocha refs: base #1e1e2e  mantle #181825  crust #11111b  text #cdd6f4
- *             surface0 #313244  surface1 #45475a  overlay0 #6c7086
- *             claude-orange #e57e5a  green #a6e3a1  blue #89b4fa
- *             red #f38ba8  rosewater #f5e0dc
+ * Palette: Catppuccin Mocha neutrals, Claude Code accents — see PALETTE.md.
+ *
+ * Neutrals: base #1e1e2e  mantle #181825  crust #11111b  text #cdd6f4
+ *           surface0 #313244  surface1 #45475a  overlay0 #6c7086
+ * Accents:  orange #d77757  shimmer #f59575  green #4eba65
+ *           blue #b1b9f9  red #ff6b80
  */
 
 * {
@@ -70,11 +72,11 @@ window#waybar {
 }
 
 #custom-network.online {
-    color: #a6e3a1;               /* green */
+    color: #4eba65;               /* green */
 }
 
 #custom-network.offline {
-    color: #f38ba8;               /* red */
+    color: #ff6b80;               /* red */
     /* Tinted background as well as red text: this is the one module whose
      * bad state should be noticeable without looking straight at it. */
     background: #45475a;          /* surface1 */
@@ -85,20 +87,20 @@ window#waybar {
  * are gone, so each keeps its own hue.
  */
 #custom-cpu-temp {
-    color: #e57e5a;               /* Claude orange */
+    color: #d77757;               /* Claude orange */
 }
 
 #custom-gpu-temp {
-    color: #a6e3a1;               /* green */
+    color: #4eba65;               /* green */
 }
 
 #pulseaudio {
-    color: #89b4fa;               /* blue */
+    color: #b1b9f9;               /* blue */
 }
 
 #pulseaudio.muted {
     background: #45475a;          /* surface1 — muted reads as inactive */
-    color: #f38ba8;               /* red */
+    color: #ff6b80;               /* red */
 }
 
 #clock.date {
@@ -106,7 +108,7 @@ window#waybar {
 }
 
 #clock.time {
-    color: #f5e0dc;               /* rosewater */
+    color: #f59575;               /* claude shimmer */
     /* Every chip is now the same family, size and weight — the modules are
      * distinguished by colour alone. The extra padding this chip used to
      * carry was compensating for bold being wider; at regular weight the

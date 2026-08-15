@@ -1,0 +1,102 @@
+# Notification popups. Catppuccin Mocha neutrals, Claude Code accents —
+# see PALETTE.md.
+#
+# There was no dunstrc at all until now, so notifications rendered in dunst's
+# built-in default (white box, black text), which is the one surface on the
+# desktop that still broke the theme.
+#
+# Shape deliberately mirrors waybar/style.css: 2px corner radius and a 2px
+# frame, so a notification reads as another chip from the same system rather
+# than as a floating card.
+
+[global]
+    # Same monitor as waybar (DP-3, the 4K panel). "mouse" would let popups
+    # land on whichever screen the pointer happens to be on, which is worse
+    # when one display is a TV.
+    follow = none
+    monitor = 0
+
+    width = (300, 520)
+    height = (0, 400)
+    origin = top-right
+    # Clears waybar: 58px bar + 8px margin-top + 8px breathing room. The x
+    # offset matches the bar's 20px side margin so their right edges line up.
+    offset = (20, 74)
+    notification_limit = 5
+
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 200
+    progress_bar_max_width = 520
+    progress_bar_corner_radius = 2
+
+    indicate_hidden = yes
+    separator_height = 2
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 10
+    frame_width = 2
+    corner_radius = 2
+    gap_size = 6
+    separator_color = frame
+    sort = yes
+
+    font = JetBrainsMono Nerd Font 11
+    line_height = 0
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = middle
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = no
+
+    enable_recursive_icon_lookup = true
+    icon_theme = "Papirus-Dark"
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 64
+
+    sticky_history = yes
+    history_length = 20
+
+    dmenu = /usr/bin/rofi -dmenu -p dunst
+    browser = /usr/bin/firefox
+    always_run_script = true
+
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#1e1e2e"
+    foreground = "#a6adc8"
+    frame_color = "#6c7086"
+    timeout = 5
+
+[urgency_normal]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    # mauve slot = Claude autoAccept, the same accent as the Hyprland active
+    # border and rofi's selection.
+    frame_color = "#af87ff"
+    timeout = 8
+
+[urgency_critical]
+    background = "#1e1e2e"
+    foreground = "#cdd6f4"
+    # red slot = Claude error
+    frame_color = "#ff6b80"
+    timeout = 0
+
+# Screenshot confirmations carry the image as their icon; give them the orange
+# frame so they read as "something you did" rather than "something went wrong".
+[screenshot]
+    appname = notify-send
+    summary = "Screenshot saved"
+    frame_color = "#d77757"
+    timeout = 4

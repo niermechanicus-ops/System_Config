@@ -141,7 +141,7 @@ hl.config({
 
 		col = {
 			-- Catppuccin Mocha
-			active_border = { colors = { "rgba(cba6f7ee)", "rgba(89b4faee)" }, angle = 45 },
+			active_border = { colors = { "rgba(af87ffee)", "rgba(b1b9f9ee)" }, angle = 45 },
 			inactive_border = "rgba(45475aaa)",
 		},
 

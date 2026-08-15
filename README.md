@@ -1,6 +1,7 @@
 # System_Config
 
-Arch Linux + Hyprland desktop, themed Catppuccin Mocha throughout. This repo is the
+Arch Linux + Hyprland desktop: Catppuccin Mocha neutrals with Claude Code's dark
+accent palette (see `PALETTE.md`) throughout. This repo is the
 actual config files (not copies) — `~/.config/<app>` is symlinked into this repo, so
 editing either path edits the same file. See `.recovery/SNAPSHOT.md` for a short
 plain-text summary meant to be pasted into a fresh Claude Code chat after a crash.
@@ -25,27 +26,36 @@ plain-text summary meant to be pasted into a fresh Claude Code chat after a cras
    - `nvim --headless "+Lazy! sync" +qa` to pull LazyVim's plugins
    - set Dolphin's color scheme once (`kwriteconfig6` or just open Dolphin settings — `kdeglobals` alone isn't always picked up live)
 
-## Theme: Catppuccin Mocha
+## Theme: Mocha neutrals, Claude Code accents
 
-Hex codes are already embedded in every themed config file (waybar `style.css`,
+**`PALETTE.md` is the source of truth** — it has the full accent map, where each
+value came from, and the command to re-derive them after a Claude Code update.
+
+Hex codes are embedded in every themed config file (waybar `style.css`,
 `rofi/catppuccin-mocha.rasi`, `kitty/catppuccin-mocha.conf`, `hypr/hyprland.lua`
-border colors, `mpv/mpv.conf`, obs-studio `.ovt`/`.obt` theme files) — nothing here
-is a "generate from a palette" setup, the colors are just hardcoded per-app the way
-each tool expects. Quick reference if you need the raw values:
+border colors, `dunst/dunstrc`, `nvim/lua/plugins/colorscheme.lua`, `mpv/mpv.conf`,
+obs-studio `.ovt`/`.obt` theme files) — nothing here is a "generate from a palette"
+setup, the colors are just hardcoded per-app the way each tool expects. Quick
+reference:
 
-| Name       | Hex       |
-|------------|-----------|
-| Base       | `#1e1e2e` |
-| Mantle     | `#181825` |
-| Surface0   | `#313244` |
-| Surface1   | `#45475a` |
-| Text       | `#cdd6f4` |
-| Mauve      | `#cba6f7` |
-| Blue       | `#89b4fa` |
-| Red        | `#eba0ac` (maroon-ish variant used for e.g. waybar warnings) |
+| Name       | Hex       | Source                        |
+|------------|-----------|-------------------------------|
+| Base       | `#1e1e2e` | Mocha                         |
+| Mantle     | `#181825` | Mocha                         |
+| Surface0   | `#313244` | Mocha                         |
+| Surface1   | `#45475a` | Mocha                         |
+| Text       | `#cdd6f4` | Mocha                         |
+| Orange     | `#d77757` | Claude `claude` — the accent  |
+| Shimmer    | `#f59575` | Claude `claudeShimmer`        |
+| Purple     | `#af87ff` | Claude `autoAccept`           |
+| Blue       | `#b1b9f9` | Claude `permission`           |
+| Green      | `#4eba65` | Claude `success`              |
+| Yellow     | `#ffc107` | Claude `warning`              |
+| Red        | `#ff6b80` | Claude `error`                |
 
-(Full 26-color Catppuccin Mocha palette: https://catppuccin.com/palette — the table
-above is only the ones actually reused across configs here, not the whole set.)
+Files and scheme names still say "catppuccin" (`rofi/catppuccin-mocha.rasi`,
+`CatppuccinMochaMauve.colors`) — those names are keys other things reference, so
+renaming them would orphan the scheme for no gain.
 
 - **Font**: JetBrainsMono Nerd Font, package `ttf-jetbrains-mono-nerd` (AUR:
   `nerd-fonts` group). Used in kitty, waybar, gtk, mpv OSD, rofi.

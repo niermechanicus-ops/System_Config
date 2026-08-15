@@ -69,26 +69,25 @@ error_symbol = "[❯](bold fg:red)"
 vimcmd_symbol = "[❮](bold fg:green)"
 
 [palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
+rosewater = "#f59575"
+flamingo = "#f59575"
+pink = "#fd5db1"
+mauve = "#af87ff"
+red = "#ff6b80"
+maroon = "#ff6b80"
 
-# The orange accent across this whole setup is Claude's orange, not
-# Catppuccin's peach — see waybar/style.css, fastfetch, yazi, kdeglobals.
-# `peach` is left at its canonical value below but is deliberately unused;
-# reach for claude_orange instead so the accent stays consistent.
-claude_orange = "#e57e5a"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
+# `peach` and `claude_orange` are the same value on purpose: the slot keeps its
+# Catppuccin name so the palette stays a drop-in, and the alias reads better at
+# the use site. Both are Claude Code's `claude` orange — see PALETTE.md.
+claude_orange = "#d77757"
+peach = "#d77757"
+yellow = "#ffc107"
+green = "#4eba65"
+teal = "#48968c"
+sky = "#48968c"
+sapphire = "#6a9bcc"
+blue = "#b1b9f9"
+lavender = "#b1b9f9"
 text = "#cdd6f4"
 subtext1 = "#bac2de"
 subtext0 = "#a6adc8"
