@@ -18,10 +18,10 @@ poweroff_entry="  Power Off"
 # purple. Both selection colors below are fully opaque.
 theme_str='
 * {
-    umber-bg:   #1e1b19f5;  /* warm-shifted Mocha base                 */
-    umber-sel:  #4a3527;    /* deep umber, from peach pulled to mantle */
-    umber-line: #6b4a35;    /* one step up, for the frame              */
-    sel-fg:     #f5e0dc;    /* Catppuccin rosewater, opaque            */
+    umber-bg:   #1e1b19f5;  /* warm-shifted Mocha base                  */
+    umber-sel:  #44251a;    /* deep umber, Claude orange toward mantle  */
+    umber-line: #623423;    /* one step up, for the frame               */
+    sel-fg:     #f5e0dc;    /* Catppuccin rosewater, opaque             */
 }
 
 window {

@@ -4,11 +4,11 @@
         "type": "builtin",
         "source": "arch_small",
         "padding": { "top": 3, "left": 2, "right": 2 },
-        "color": { "1": "#fab387", "2": "#fab387" }
+        "color": { "1": "#e57e5a", "2": "#e57e5a" }
     },
     "display": {
         "separator": "  ",
-        "color": { "keys": "#fab387", "title": "#fab387" }
+        "color": { "keys": "#e57e5a", "title": "#e57e5a" }
     },
     "modules": [
         "title",

@@ -21,9 +21,9 @@ ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#a6e3a1'
 ZSH_HIGHLIGHT_STYLES[function]='fg=#a6e3a1'
 ZSH_HIGHLIGHT_STYLES[command]='fg=#a6e3a1'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=#a6e3a1,italic'
-ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#fab387,italic'
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#fab387'
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#fab387'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#e57e5a,italic'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#e57e5a'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#e57e5a'
 ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'
 ## Keywords
 ## Built ins

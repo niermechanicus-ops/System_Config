@@ -47,7 +47,7 @@ style = "fg:mauve bg:surface0"
 format = "[ on $symbol $branch ]($style)"
 
 [git_status]
-style = "fg:peach bg:surface0"
+style = "fg:claude_orange bg:surface0"
 format = "[$all_status$ahead_behind ]($style)"
 
 # Only shown when a command took a noticeable amount of time — keeps the
@@ -75,6 +75,12 @@ pink = "#f5c2e7"
 mauve = "#cba6f7"
 red = "#f38ba8"
 maroon = "#eba0ac"
+
+# The orange accent across this whole setup is Claude's orange, not
+# Catppuccin's peach — see waybar/style.css, fastfetch, yazi, kdeglobals.
+# `peach` is left at its canonical value below but is deliberately unused;
+# reach for claude_orange instead so the accent stays consistent.
+claude_orange = "#e57e5a"
 peach = "#fab387"
 yellow = "#f9e2af"
 green = "#a6e3a1"

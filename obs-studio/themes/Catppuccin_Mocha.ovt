@@ -13,7 +13,7 @@
     --ctp_mauve: #cba6f7;
     --ctp_red: #f38ba8;
     --ctp_maroon: #eba0ac;
-    --ctp_peach: #fab387;
+    --ctp_peach: #e57e5a;   /* Claude orange, not Catppuccin peach */
     --ctp_yellow: #f9e2af;
     --ctp_green: #a6e3a1;
     --ctp_teal: #94e2d5;

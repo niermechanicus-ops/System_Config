@@ -16,7 +16,7 @@
 #             crust #11111b (17,17,27)  surface0 #313244 (49,50,68)
 #             surface1 #45475a (69,71,90)  text #cdd6f4 (205,214,244)
 #             subtext0 #a6adc8 (166,173,200)  mauve #cba6f7 (203,166,247)
-#             peach #fab387  green #a6e3a1  red #f38ba8  yellow #f9e2af
+#             claude-orange #e57e5a  green #a6e3a1  red #f38ba8  yellow #f9e2af
 
 [General]
 ColorScheme=CatppuccinMochaMauve
@@ -41,7 +41,7 @@ BackgroundNormal=30, 30, 46
 BackgroundAlternate=24, 24, 37
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
@@ -55,7 +55,7 @@ BackgroundNormal=24, 24, 37
 BackgroundAlternate=17, 17, 27
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
@@ -69,7 +69,7 @@ BackgroundNormal=49, 50, 68
 BackgroundAlternate=203, 166, 247
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
@@ -97,7 +97,7 @@ BackgroundNormal=30, 30, 46
 BackgroundAlternate=17, 17, 27
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
@@ -111,7 +111,7 @@ BackgroundNormal=24, 24, 37
 BackgroundAlternate=17, 17, 27
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
@@ -125,7 +125,7 @@ BackgroundNormal=24, 24, 37
 BackgroundAlternate=17, 17, 27
 DecorationFocus=203, 166, 247
 DecorationHover=69, 71, 90
-ForegroundActive=250, 179, 135
+ForegroundActive=229, 126, 90
 ForegroundInactive=166, 173, 200
 ForegroundLink=203, 166, 247
 ForegroundNegative=243, 139, 168
