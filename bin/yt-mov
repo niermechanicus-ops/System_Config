@@ -119,6 +119,15 @@ progress_filter() {
     '
 }
 
+# YouTube's default client for yt-dlp (android_vr) now 403s on the actual
+# media URLs -- it extracts formats fine, then every fragment is Forbidden,
+# because that client wants a GVS PO token. Most other clients are degraded
+# too right now (tv = DRM-only, web_safari/ios = images-only, android = SABR
+# -only, mweb = needs a PO token). web_embedded still serves real streams, so
+# ask for it first and fall back to yt-dlp's normal client list if a future
+# version fixes things.
+client_args=(--extractor-args "youtube:player_client=web_embedded,default")
+
 tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
@@ -128,10 +137,10 @@ if [ -n "$start" ] || [ -n "$end" ]; then
     start_s=$(to_seconds "${start:-0}")
     first_dur=""
     for url in "$@"; do
-        dur=$(yt-dlp --print duration -- "$url" 2>/dev/null | head -1)
+        dur=$(yt-dlp "${client_args[@]}" --print duration -- "$url" 2>/dev/null | head -1)
         [ -n "$first_dur" ] || first_dur="$dur"
         if [[ "$dur" =~ ^[0-9]+$ ]] && [ "$start_s" -ge "$dur" ]; then
-            dur_str=$(yt-dlp --print duration_string -- "$url" 2>/dev/null)
+            dur_str=$(yt-dlp "${client_args[@]}" --print duration_string -- "$url" 2>/dev/null)
             echo "Error: start time ${start:-0} is at or past the end of $url (video is only ${dur_str})" >&2
             exit 1
         fi
@@ -143,7 +152,7 @@ fi
 
 downloaded=0
 for attempt in 1 2 3; do
-    if yt-dlp --merge-output-format mkv --concurrent-fragments 8 \
+    if yt-dlp "${client_args[@]}" --merge-output-format mkv --concurrent-fragments 8 \
         --downloader-args "ffmpeg:-loglevel error -nostats -progress pipe:1" \
         "${section_args[@]}" -o "${tmp_dir}/%(title)s.%(ext)s" "$@" 2>&1 \
         | progress_filter "$clip_duration_s" "Downloading"; then
