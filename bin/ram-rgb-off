@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Blank the RGB on every DRAM module OpenRGB can see.
+#
+# The DIMM controllers power on running their own hardware effect, so this has
+# to be re-applied on every boot -- see systemd/ram-rgb-off.service.
+#
+# Device indices are looked up by type rather than hardcoded, so adding or
+# removing an RGB device elsewhere in the machine can't silently retarget this
+# at the GPU or the motherboard.
+set -uo pipefail
+
+OPENRGB=/usr/bin/openrgb
+
+dram_indices() {
+	# --list-devices prints "N: <name>" then an indented "Type: <type>" line.
+	"$OPENRGB" --list-devices 2>/dev/null | awk '
+		/^[0-9]+:/            { idx = $1; sub(":", "", idx) }
+		/^[[:space:]]+Type:/  { if ($2 == "DRAM") print idx }
+	'
+}
+
+# i2c-piix4 can still be settling this early in the boot, so give it a while.
+for _ in $(seq 1 15); do
+	mapfile -t devices < <(dram_indices)
+	((${#devices[@]})) && break
+	sleep 2
+done
+
+if ((${#devices[@]} == 0)); then
+	echo "ram-rgb-off: no DRAM RGB devices detected" >&2
+	exit 1
+fi
+
+# One invocation for all of them -- each openrgb call redoes full detection,
+# which is the slow part.
+args=()
+for i in "${devices[@]}"; do
+	args+=(--device "$i" --mode direct --color 000000)
+done
+
+"$OPENRGB" "${args[@]}" >/dev/null 2>&1
+echo "ram-rgb-off: blanked DRAM device(s) ${devices[*]}"

@@ -25,6 +25,7 @@ hypridle
 hyprland
 hyprlock
 hyprpaper
+i2c-tools
 kdegraphics-thumbnailers
 kitty
 lazygit
@@ -47,6 +48,7 @@ noto-fonts-emoji
 nvidia-open
 obs-studio
 opencl-nvidia
+openrgb
 pacman-contrib
 papirus-icon-theme
 pipewire
