@@ -19,6 +19,7 @@
     "modules-right": [
         "custom/cpu-temp",
         "custom/gpu-temp",
+        "custom/scarlett",
         "pulseaudio",
         "clock#date",
         "clock#time"
@@ -65,14 +66,31 @@
         "tooltip": true
     },
 
+    "custom/scarlett": {
+        "exec": "~/.config/waybar/scripts/scarlett.sh",
+        "return-type": "json",
+        // Slower than the temp chips: the chip's text never changes, only the
+        // tooltip, and each refresh is a handful of USB round trips to the
+        // interface. 10s is plenty to notice a hotplug.
+        "interval": 10,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "alsa-scarlett-gui"
+    },
+
     "pulseaudio": {
         "format": "{icon}  {volume}%",
         "format-muted": "  muted",
         "format-icons": {
             "default": ["", "", ""]
         },
-        "tooltip": false,
+        // Was false. It is on now purely so the right-click below is
+        // discoverable — there is no other way for the bar to advertise a
+        // click action that isn't the obvious one.
+        "tooltip": true,
+        "tooltip-format": "{desc}\n{volume}%\n\nLeft-click   mute\nRight-click   pavucontrol\nScroll   volume",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "pavucontrol",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
         "scroll-step": 5

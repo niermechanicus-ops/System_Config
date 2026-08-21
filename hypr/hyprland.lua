@@ -509,3 +509,28 @@ hl.window_rule({
 	float = true,
 	center = true,
 })
+
+-- Audio panels launched from the waybar chips. Both are dialogs in spirit
+-- rather than windows you work in, so neither should take a tile.
+--
+-- pavucontrol tiles by default and ends up half the screen wide on this
+-- monitor; alsa-scarlett-gui already floats itself, but without a rule it
+-- opens wherever it lands and can drift onto the 1080p panel.
+hl.window_rule({
+	name = "pavucontrol-float",
+	match = { class = "^org\\.pulseaudio\\.pavucontrol$" },
+
+	monitor = "DP-3",
+	float = true,
+	size = { "monitor_w * 0.42", "monitor_h * 0.55" },
+	center = true,
+})
+
+hl.window_rule({
+	name = "scarlett-gui-float",
+	match = { class = "^vu\\.b4\\.alsa-scarlett-gui$" },
+
+	monitor = "DP-3",
+	float = true,
+	center = true,
+})
