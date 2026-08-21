@@ -36,6 +36,9 @@ link icons/catppuccin-mocha-dark-cursors  "$HOME/.local/share/icons/catppuccin-m
 link icons/catppuccin-mocha-mauve-cursors "$HOME/.local/share/icons/catppuccin-mocha-mauve-cursors"
 link zsh/zshrc          "$HOME/.zshrc"
 link bashrc            "$HOME/.bashrc"
+# See the file's own comment: routes ALSA's "default" through the PulseAudio
+# plugin, which is the only path DaVinci Resolve's Fairlight input works on.
+link asoundrc           "$HOME/.asoundrc"
 link starship.toml        "$HOME/.config/starship.toml"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
 link bin/idle-inhibit-media   "$HOME/.local/bin/idle-inhibit-media"

@@ -1,0 +1,48 @@
+# ALSA: send the "default" PCM through the PulseAudio plugin rather than the
+# PipeWire one.
+#
+# Audio still ends up in PipeWire either way — pipewire-pulse serves this
+# path. The only thing that changes is which ALSA plugin an ALSA-native
+# application loads on its way there: libasound_module_pcm_pulse.so instead
+# of libasound_module_pcm_pipewire.so.
+#
+# This exists for DaVinci Resolve. Fairlight is pinned to whatever ALSA calls
+# "default" — under its only Linux I/O engine ("System Audio") the Input
+# device row in Preferences > System > Video and Audio I/O is static text, so
+# there is no way to point it at a device from inside the application. Through
+# the PipeWire ALSA plugin its capture path is silently dead: the stream
+# negotiates (F32LE, 8ch, 48kHz), WirePlumber links it to the microphone and
+# pw-top shows the node running without xruns, but nothing reaches the audio
+# engine. The input meter never moves, and a voiceover take lands on the
+# timeline with the right name, length and format and every sample exactly 0.
+#
+# Nothing below Resolve was at fault — capturing from the same "default" PCM
+# with the same format and channel count Resolve asks for puts the microphone
+# on channel 1 where it belongs, through either plugin:
+#
+#   arecord -D default -f FLOAT_LE -c 8 -> ch1 -53 dBFS, ch2-8 silent
+#   arecord -D pulse   -f FLOAT_LE -c 8 -> ch1 -48 dBFS, ch2-8 silent
+#
+# Why this file and not the packaged fix: the usual advice is to install
+# pulseaudio-alsa, which lands a 99-pulseaudio-default.conf in
+# /etc/alsa/conf.d and displaces pipewire-alsa's. That package no longer
+# exists on Arch — its config moved into alsa-plugins, which ships the file
+# to /usr/share/alsa/alsa.conf.d but never symlinks it into /etc/alsa/conf.d,
+# leaving pipewire-alsa's 99-pipewire-default.conf as the only definition of
+# "default" on the system. ~/.asoundrc is read after /etc/alsa/conf.d, so it
+# wins without removing pipewire-alsa or fighting a package update.
+#
+# To undo: delete this file. Resolve only reads it at startup, so the
+# application has to be fully quit and reopened for a change here to apply.
+
+pcm.!default {
+    type pulse
+    # If the PulseAudio/pipewire-pulse socket is not up, fall back to the
+    # card ALSA would have chosen anyway rather than failing the open.
+    fallback "sysdefault"
+}
+
+ctl.!default {
+    type pulse
+    fallback "sysdefault"
+}
