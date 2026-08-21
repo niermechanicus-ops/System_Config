@@ -79,6 +79,11 @@ renaming them would orphan the scheme for no gain.
 
 ## Non-appearance stuff also in here
 
+- **`AUDIO.md`** — the audio chain (Cloudlifter into a Scarlett 2i2 4th Gen),
+  PipeWire routing, the waybar audio chips, and the `asoundrc` workaround this
+  machine needs before DaVinci Resolve will record anything but silence. Read it
+  before touching `asoundrc`, which otherwise looks like a stray PulseAudio file
+  on a PipeWire system.
 - `bin/yt-mov`: downloads a YouTube video and transcodes it for DaVinci Resolve
   (free/non-Studio build). Must encode video as DNxHR (`dnxhd` encoder, profile
   `dnxhr_hq`, `yuv422p`), not H.264 — free Resolve on Linux has no H.264 decoder
