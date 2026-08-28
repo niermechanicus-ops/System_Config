@@ -75,6 +75,20 @@ hl.on("hyprland.start", function()
 	-- connection, disk tools) fails with no prompt and no error at all.
 	-- The system polkitd daemon is NOT this — it's the arbiter, not the UI.
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+
+	-- Tell Xwayland that DP-3, not HDMI-A-2, is the primary output.
+	--
+	-- Hyprland has no "primary monitor" concept, so Xwayland hands X clients
+	-- its outputs in its own order and HDMI-A-2 (1920x1080) came first. Wine
+	-- maps the X primary to \.\DISPLAY1, so every Proton game enumerated
+	-- display modes off the 1080p panel and capped its fullscreen resolution
+	-- there — Dark Souls II went fullscreen on the 4K screen but only drew
+	-- 1920x1080 into the top-left quarter of it, and rewrote any larger value
+	-- back out of its own config on exit.
+	--
+	-- Retried in a loop because Xwayland is started lazily: at hyprland.start
+	-- there is usually no X server to talk to yet.
+	hl.exec_cmd([[bash -c 'for i in $(seq 1 60); do xrandr --output DP-3 --primary 2>/dev/null && exit 0; sleep 1; done']])
 end)
 
 -- Waybar runs in the "bottom" layer (see waybar/config.jsonc) so fullscreen
