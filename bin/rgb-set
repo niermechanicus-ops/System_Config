@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Set every RGB device OpenRGB can see to one solid colour.
 #
-#   rgb-set            -> default (dark umber)
+#   rgb-set            -> default (burnt sienna)
 #   rgb-set 00AAFF     -> any hex colour
 #   rgb-set 000000     -> everything off
 #
@@ -13,7 +13,7 @@
 set -uo pipefail
 
 OPENRGB=/usr/bin/openrgb
-COLOR=${1:-6B1E00}
+COLOR=${1:-A13611}
 
 # OpenRGB 1.0 moved "Type:" out of --list-devices and into --list-detailed;
 # the old ram-rgb-off parsed the former and silently found nothing.
