@@ -57,6 +57,7 @@ window#waybar {
 #custom-cpu-temp,
 #custom-gpu-temp,
 #custom-network,
+#custom-rgb,
 #custom-scarlett,
 #pulseaudio {
     background: #313244;          /* surface0 */
@@ -129,6 +130,17 @@ window#waybar {
 
 #pulseaudio {
     color: #b1b9f9;               /* blue */
+}
+
+/* The bulb glyph is coloured inline by scripts/rgb.sh with the actual LED
+ * colour, so the chip is its own swatch; the label stays plain text so the
+ * chip doesn't add an orange that would read as a "warm" state. */
+#custom-rgb.on {
+    color: #cdd6f4;               /* text */
+}
+
+#custom-rgb.off {
+    color: #6c7086;               /* overlay0 — dimmed, like an unlit bulb */
 }
 
 #pulseaudio.muted {

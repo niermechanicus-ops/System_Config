@@ -17,6 +17,7 @@
     "modules-left": ["custom/network"],
     "modules-center": [],
     "modules-right": [
+        "custom/rgb",
         "custom/cpu-temp",
         "custom/gpu-temp",
         "custom/scarlett",
@@ -48,6 +49,19 @@
     "clock#time": {
         "format": "{:%H:%M}",
         "tooltip": false
+    },
+
+    "custom/rgb": {
+        "exec": "~/.config/waybar/scripts/rgb.sh",
+        "return-type": "json",
+        // No polling: rgb-set sends SIGRTMIN+9 whenever the colour changes,
+        // and nothing else touches the lights.
+        "interval": "once",
+        "signal": 9,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "~/.config/waybar/scripts/rgb-menu.sh",
+        "on-click-right": "~/.config/waybar/scripts/rgb-menu.sh toggle"
     },
 
     "custom/cpu-temp": {

@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 # Set every RGB device OpenRGB can see to one solid colour.
 #
-#   rgb-set            -> default (dark orange)
-#   rgb-set 00AAFF     -> any hex colour
+#   rgb-set            -> re-apply the saved colour (what rgb.service runs)
+#   rgb-set 00AAFF     -> any hex colour, saved for next boot
 #   rgb-set 000000     -> everything off
+#
+# The chosen colour is saved to $XDG_STATE_HOME/rgb/color, so whatever was
+# picked last -- here or from the waybar chip -- is what comes back at boot.
+# The last colour that wasn't "off" is kept separately in .../rgb/last, so the
+# chip's on/off toggle has something to turn back on to.
 #
 # The DIMM and GPU controllers power on running their own hardware effect, so
 # this has to be re-applied on every boot -- see systemd/rgb.service.
@@ -13,7 +18,33 @@
 set -uo pipefail
 
 OPENRGB=/usr/bin/openrgb
-COLOR=${1:-FF3000}
+DEFAULT=FF3000
+STATE_DIR=${XDG_STATE_HOME:-$HOME/.local/state}/rgb
+
+mkdir -p "$STATE_DIR"
+
+if (($#)); then
+	color=${1#\#}
+	if ! [[ $color =~ ^[0-9A-Fa-f]{6}$ ]]; then
+		echo "rgb-set: '$1' is not a 6-digit hex colour" >&2
+		exit 2
+	fi
+	color=${color^^}
+	printf '%s\n' "$color" >"$STATE_DIR/color"
+	[[ $color != 000000 ]] && printf '%s\n' "$color" >"$STATE_DIR/last"
+fi
+
+# Repaint the waybar chip now -- the hardware takes a few seconds to catch up.
+pkill -RTMIN+9 -x waybar 2>/dev/null
+
+# Two clicks in quick succession would otherwise run two openrgb instances
+# against the same SMBus at once. Serialise, and read the colour only *after*
+# getting the lock, so a queued call applies the newest choice rather than
+# whatever it was started with.
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/rgb-set.lock"
+flock 9
+
+COLOR=$(cat "$STATE_DIR/color" 2>/dev/null || echo "$DEFAULT")
 
 # OpenRGB 1.0 moved "Type:" out of --list-devices and into --list-detailed;
 # the old ram-rgb-off parsed the former and silently found nothing.
