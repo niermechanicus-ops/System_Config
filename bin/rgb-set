@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Set every RGB device OpenRGB can see to one solid colour.
+#
+#   rgb-set            -> default (dark orange)
+#   rgb-set 00AAFF     -> any hex colour
+#   rgb-set 000000     -> everything off
+#
+# The DIMM and GPU controllers power on running their own hardware effect, so
+# this has to be re-applied on every boot -- see systemd/rgb.service.
+#
+# Devices are looked up by type rather than hardcoded indices, so adding or
+# removing an RGB device can't silently retarget the wrong one.
+set -uo pipefail
+
+OPENRGB=/usr/bin/openrgb
+COLOR=${1:-FF3000}
+
+# OpenRGB 1.0 moved "Type:" out of --list-devices and into --list-detailed;
+# the old ram-rgb-off parsed the former and silently found nothing.
+list_devices() {
+	"$OPENRGB" --list-detailed 2>/dev/null | awk '
+		/^[0-9]+:/            { idx = $1; sub(":", "", idx) }
+		/^[[:space:]]+Type:/  { print idx, $2 }
+	'
+}
+
+# i2c-piix4 can still be settling this early in the boot, and the RAM sits on
+# SMBus, so keep retrying until the DIMMs show up (or give up after ~75s).
+for _ in $(seq 1 15); do
+	mapfile -t devices < <(list_devices)
+	printf '%s\n' "${devices[@]}" | grep -q ' DRAM$' && break
+	sleep 2
+done
+
+if ((${#devices[@]} == 0)); then
+	echo "rgb-set: no RGB devices detected" >&2
+	exit 1
+fi
+
+# One invocation for all of them -- each openrgb call redoes full detection,
+# which is the slow part. The motherboard has a real Static mode that it holds
+# in hardware; the RAM and GPU only take Direct.
+args=()
+for d in "${devices[@]}"; do
+	read -r idx type <<<"$d"
+	case $type in
+		Motherboard) mode=static ;;
+		*)           mode=direct ;;
+	esac
+	args+=(--device "$idx" --mode "$mode" --color "$COLOR")
+done
+
+"$OPENRGB" "${args[@]}" >/dev/null 2>&1
+echo "rgb-set: set ${#devices[@]} device(s) to #$COLOR: $(printf '%s ' "${devices[@]#* }")"

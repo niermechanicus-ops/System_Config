@@ -43,8 +43,8 @@ link starship.toml        "$HOME/.config/starship.toml"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
 link bin/idle-inhibit-media   "$HOME/.local/bin/idle-inhibit-media"
 link systemd/idle-inhibit-media.service "$HOME/.config/systemd/user/idle-inhibit-media.service"
-link bin/ram-rgb-off       "$HOME/.local/bin/ram-rgb-off"
-link systemd/ram-rgb-off.service    "$HOME/.config/systemd/user/ram-rgb-off.service"
+link bin/rgb-set           "$HOME/.local/bin/rgb-set"
+link systemd/rgb.service            "$HOME/.config/systemd/user/rgb.service"
 
 # Takes priority over plasma-workspace's claim on the notification bus name,
 # which would otherwise leave notify-send hanging. See the file's own comment.
@@ -59,4 +59,4 @@ echo "Done. Still manual: install packages (.system/pacman-packages.txt,"
 echo ".system/aur-packages.txt), install the Nerd Font, chsh -s /usr/bin/zsh,"
 echo "install oh-my-zsh, and (for nvim) run: nvim --headless \"+Lazy! sync\" +qa"
 echo
-echo "Also manual: systemctl --user enable --now idle-inhibit-media.service ram-rgb-off.service"
+echo "Also manual: systemctl --user enable --now idle-inhibit-media.service rgb.service"

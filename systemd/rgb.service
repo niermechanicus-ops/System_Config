@@ -1,14 +1,14 @@
 [Unit]
-Description=Blank RAM RGB lighting
-Documentation=file:%h/Documents/dotfiles/bin/ram-rgb-off
-# The DIMM controllers come up running their own hardware effect, so the blank
+Description=Set RGB lighting to dark orange
+Documentation=file:%h/Documents/dotfiles/bin/rgb-set
+# The DIMM controllers come up running their own hardware effect, so the colour
 # has to be re-sent every boot. The i2c uaccess ACL that lets this run without
 # root is granted when the seat session becomes active, hence the ordering.
 After=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/ram-rgb-off
+ExecStart=%h/.local/bin/rgb-set
 # The script retries detection for up to ~75s while i2c settles, which would
 # otherwise run past systemd's 90s default and get killed mid-wait.
 TimeoutStartSec=180
