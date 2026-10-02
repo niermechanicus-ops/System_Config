@@ -1,5 +1,5 @@
 [Unit]
-Description=Set RGB lighting to dark burnt orange
+Description=Set RGB lighting to dark orange
 Documentation=file:%h/Documents/dotfiles/bin/rgb-set
 # The DIMM controllers come up running their own hardware effect, so the colour
 # has to be re-sent every boot. The i2c uaccess ACL that lets this run without
