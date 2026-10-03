@@ -69,7 +69,7 @@ same reason.
 
 ## Applied in
 
-waybar, kitty, rofi, hyprland (borders), hyprlock, starship, zsh syntax
+waybar, kitty, rofi, hyprland (borders), hyprlock, starship, VS Code, zsh syntax
 highlighting, fzf, yazi, neovim (catppuccin with `color_overrides`), fastfetch,
 mpv OSC, OBS, dunst, and kdeglobals + `color-schemes/CatppuccinMochaMauve.colors`
 for Qt/KDE apps.

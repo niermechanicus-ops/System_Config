@@ -43,6 +43,7 @@ link starship.toml        "$HOME/.config/starship.toml"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
 link bin/idle-inhibit-media   "$HOME/.local/bin/idle-inhibit-media"
 link systemd/idle-inhibit-media.service "$HOME/.config/systemd/user/idle-inhibit-media.service"
+link vscode/settings.json  "$HOME/.config/Code/User/settings.json"
 link bin/rgb-set           "$HOME/.local/bin/rgb-set"
 link systemd/rgb.service            "$HOME/.config/systemd/user/rgb.service"
 

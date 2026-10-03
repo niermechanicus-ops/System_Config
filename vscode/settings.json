@@ -1,0 +1,51 @@
+// VS Code: Catppuccin Mocha neutrals, Claude Code dark accents.
+// See PALETTE.md at the root of this repo — keep colorOverrides in sync with it
+// (same table as nvim/lua/plugins/colorscheme.lua). Font matches kitty.conf.
+{
+  // Theme
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.preferredDarkColorTheme": "Catppuccin Mocha",
+  "window.autoDetectColorScheme": false,
+  "catppuccin.accentColor": "peach", // -> #d77757, Claude brand orange
+  "catppuccin.colorOverrides": {
+    "mocha": {
+      "rosewater": "#f59575", // claudeShimmer
+      "flamingo": "#f59575", // claudeShimmer
+      "pink": "#fd5db1", // bashBorder
+      "mauve": "#af87ff", // autoAccept
+      "red": "#ff6b80", // error
+      "maroon": "#ff6b80", // error
+      "peach": "#d77757", // claude
+      "yellow": "#ffc107", // warning
+      "green": "#4eba65", // success
+      "teal": "#48968c", // planMode
+      "sky": "#48968c", // planMode
+      "sapphire": "#6a9bcc", // professionalBlue
+      "blue": "#b1b9f9", // permission / suggestion
+      "lavender": "#b1b9f9" // permission / suggestion
+    }
+  },
+  "catppuccin.workbenchMode": "default",
+  "catppuccin.bracketMode": "rainbow",
+
+  // Font — same as kitty (JetBrainsMono Nerd Font 16)
+  "editor.fontFamily": "'JetBrainsMono Nerd Font', monospace",
+  "editor.fontSize": 16,
+  "editor.fontLigatures": true,
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font'",
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.cursorStyle": "block",
+  "terminal.integrated.cursorBlinking": false,
+  "debug.console.fontFamily": "'JetBrainsMono Nerd Font'",
+  "chat.editor.fontFamily": "'JetBrainsMono Nerd Font'",
+
+  // Look
+  "editor.semanticHighlighting.enabled": true,
+  "editor.cursorBlinking": "solid",
+  "editor.minimap.enabled": false,
+  "editor.renderLineHighlight": "all",
+  "editor.bracketPairColorization.enabled": true,
+  "window.titleBarStyle": "custom",
+  "window.menuBarVisibility": "toggle"
+}
