@@ -74,7 +74,12 @@ ZSH_THEME=""
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+# fzf-tab replaces the Tab completion menu with fzf. It has to load after
+# compinit (oh-my-zsh runs that) and before the widget-wrapping plugins
+# further down, which is exactly where an oh-my-zsh plugin lands. Guarded so
+# a fresh clone without the plugin directory still starts cleanly.
 plugins=(git)
+[ -d "${ZSH_CUSTOM:-$ZSH/custom}/plugins/fzf-tab" ] && plugins+=(fzf-tab)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -153,6 +158,39 @@ fi
 # `zi` picks from a list interactively (which uses fzf, hence the order).
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
+fi
+
+# ---- bat / eza ----
+#
+# Themes live in ~/.config/bat and ~/.config/eza, recoloured with the accent
+# map in PALETTE.md. Guarded like fzf/zoxide so a missing binary just leaves
+# the stock ls/cat in place.
+
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --icons=auto --group-directories-first'
+    alias ll='eza -l --icons=auto --group-directories-first --git'
+    alias la='eza -la --icons=auto --group-directories-first --git'
+    alias lt='eza --tree --level=2 --icons=auto'
+fi
+
+if command -v bat >/dev/null 2>&1; then
+    # -pp: plain output, no pager, so it behaves like cat in pipes and scripts.
+    # Use `bat` directly for the full view with line numbers and git changes.
+    alias cat='bat -pp'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT='-c'
+    command -v fzf >/dev/null 2>&1 && \
+        export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:300 {}'"
+fi
+
+# fzf-tab: previews for cd/z targets, and use fzf's own colours (set above).
+if (( ${plugins[(I)fzf-tab]} )); then
+    zstyle ':completion:*:descriptions' format '[%d]'
+    zstyle ':completion:*' menu no
+    zstyle ':fzf-tab:*' use-fzf-default-opts yes
+    zstyle ':fzf-tab:*' switch-group '<' '>'
+    zstyle ':fzf-tab:complete:(cd|z|__zoxide_z):*' fzf-preview \
+        'eza -1 --color=always --icons=always $realpath 2>/dev/null || ls -1 $realpath'
 fi
 
 # ---- completion / suggestion / highlighting plugins ----

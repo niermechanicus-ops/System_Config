@@ -40,6 +40,8 @@ link bashrc            "$HOME/.bashrc"
 # plugin, which is the only path DaVinci Resolve's Fairlight input works on.
 link asoundrc           "$HOME/.asoundrc"
 link starship.toml        "$HOME/.config/starship.toml"
+link bat               "$HOME/.config/bat"
+link eza               "$HOME/.config/eza"
 link bin/yt-mov          "$HOME/.local/bin/yt-mov"
 link bin/idle-inhibit-media   "$HOME/.local/bin/idle-inhibit-media"
 link systemd/idle-inhibit-media.service "$HOME/.config/systemd/user/idle-inhibit-media.service"
@@ -58,6 +60,6 @@ link obs-studio/themes     "$HOME/.config/obs-studio/themes"
 echo
 echo "Done. Still manual: install packages (.system/pacman-packages.txt,"
 echo ".system/aur-packages.txt), install the Nerd Font, chsh -s /usr/bin/zsh,"
-echo "install oh-my-zsh, and (for nvim) run: nvim --headless \"+Lazy! sync\" +qa"
+echo "install oh-my-zsh (then: git clone https://github.com/Aloxaf/fzf-tab \$ZSH_CUSTOM/plugins/fzf-tab), and (for nvim) run: nvim --headless \"+Lazy! sync\" +qa"
 echo
 echo "Also manual: systemctl --user enable --now idle-inhibit-media.service rgb.service"
