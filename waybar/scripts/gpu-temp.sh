@@ -21,7 +21,10 @@ HYST=2
 
 STATE="${XDG_RUNTIME_DIR:-/tmp}/waybar-gpu-temp.class"
 
-temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | tr -d ' ')
+# One nvidia-smi call shared with gpu-usage.sh — see gpu-query.sh.
+. "$(dirname "$0")/gpu-query.sh"
+gpu_query
+temp=$gpu_temp
 
 # No driver, no card, or nvidia-smi failing: say so rather than showing 0°C.
 if ! [[ "$temp" =~ ^[0-9]+$ ]]; then

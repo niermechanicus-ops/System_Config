@@ -22,7 +22,6 @@
         "custom/gpu-usage",
         "custom/cpu-temp",
         "custom/gpu-temp",
-        "custom/scarlett",
         "pulseaudio",
         "clock#date",
         "clock#time"
@@ -100,18 +99,6 @@
         "interval": 5,
         "format": "󰢮  {text}",
         "tooltip": true
-    },
-
-    "custom/scarlett": {
-        "exec": "~/.config/waybar/scripts/scarlett.sh",
-        "return-type": "json",
-        // Slower than the temp chips: the chip's text never changes, only the
-        // tooltip, and each refresh is a handful of USB round trips to the
-        // interface. 10s is plenty to notice a hotplug.
-        "interval": 10,
-        "format": "{}",
-        "tooltip": true,
-        "on-click": "alsa-scarlett-gui"
     },
 
     "pulseaudio": {

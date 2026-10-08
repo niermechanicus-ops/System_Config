@@ -9,10 +9,10 @@ set -uo pipefail
 
 BUSY=85
 
-IFS=', ' read -r pct mem_used mem_total power < <(
-    nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total,power.draw \
-        --format=csv,noheader,nounits 2>/dev/null
-)
+# One nvidia-smi call shared with gpu-temp.sh — see gpu-query.sh.
+. "$(dirname "$0")/gpu-query.sh"
+gpu_query
+pct=$gpu_util mem_used=$gpu_mem_used mem_total=$gpu_mem_total power=$gpu_power
 
 if ! [[ "${pct:-}" =~ ^[0-9]+$ ]]; then
     printf '{"text":"--%%","tooltip":"GPU: nvidia-smi unavailable","class":"normal"}\n'

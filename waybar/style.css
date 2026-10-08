@@ -60,7 +60,6 @@ window#waybar {
 #custom-gpu-usage,
 #custom-network,
 #custom-rgb,
-#custom-scarlett,
 #pulseaudio {
     background: #313244;          /* surface0 */
     border-radius: 2px;
@@ -131,16 +130,6 @@ window#waybar {
 #custom-cpu-usage.busy,
 #custom-gpu-usage.busy {
     color: #d77757;               /* Claude orange */
-}
-
-/* The one green on the bar, and the only chip that is an identity colour
- * rather than a state one: it is either there or it isn't. The script emits
- * empty text when no Focusrite interface is plugged in, which makes waybar
- * hide the chip entirely — so its presence already carries the "connected"
- * signal, and green just keeps it from reading as a second volume chip
- * sitting next to the real one. */
-#custom-scarlett {
-    color: #4eba65;               /* green */
 }
 
 #pulseaudio {
