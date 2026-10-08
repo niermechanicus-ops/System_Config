@@ -53,8 +53,18 @@ choice=$(printf '%s\n%s\n' "$reboot_entry" "$poweroff_entry" \
 		-theme-str "$theme_str" \
 		|| true)
 
+# Exit Hyprland gracefully before the power action. Calling systemctl directly
+# yanks the DRM session out from under Hyprland, which segfaults in libaquamarine
+# or hangs until uwsm SIGKILLs it. hyprshutdown closes apps, exits Hyprland, then
+# runs --post-cmd. It runs in its own scope because this script inherits
+# wayland-wm@hyprland.desktop.service's cgroup, which systemd kills once Hyprland
+# exits — before the post-cmd would get to run.
+graceful() {
+	systemd-run --user --scope --quiet -- hyprshutdown --post-cmd "$1"
+}
+
 case "$choice" in
-"$reboot_entry") systemctl reboot ;;
-"$poweroff_entry") systemctl poweroff ;;
+"$reboot_entry") graceful "systemctl reboot" ;;
+"$poweroff_entry") graceful "systemctl poweroff" ;;
 *) exit 0 ;; # Escape / dismissed
 esac
