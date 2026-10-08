@@ -61,7 +61,7 @@
         "signal": 9,
         "format": "{}",
         "tooltip": true,
-        "on-click": "~/.config/waybar/scripts/rgb-menu.sh",
+        "on-click": "~/.config/waybar/scripts/rgb-wheel.py",
         "on-click-right": "~/.config/waybar/scripts/rgb-menu.sh toggle"
     },
 

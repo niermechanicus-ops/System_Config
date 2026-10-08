@@ -553,3 +553,13 @@ hl.window_rule({
 	float = true,
 	center = true,
 })
+
+-- Colour wheel from the waybar RGB chip: a small dialog, keep it off the tiles.
+hl.window_rule({
+	name = "rgb-wheel-float",
+	match = { class = "^dev\\.nier\\.rgbwheel$" },
+
+	monitor = "DP-1",
+	float = true,
+	center = true,
+})
