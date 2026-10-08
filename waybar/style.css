@@ -56,6 +56,8 @@ window#waybar {
 #clock.time,
 #custom-cpu-temp,
 #custom-gpu-temp,
+#custom-cpu-usage,
+#custom-gpu-usage,
 #custom-network,
 #custom-rgb,
 #custom-scarlett,
@@ -116,6 +118,19 @@ window#waybar {
 #custom-gpu-temp.hot {
     color: #ff6b80;               /* red */
     background: #45475a;          /* surface1 — same treatment as a muted sink */
+}
+
+/* Usage chips use the same blue/orange as the temp chips but have no red
+ * step: 100% load is the hardware doing its job, not a fault. Orange from 85%
+ * (see scripts/{cpu,gpu}-usage.sh) just flags that something is pegging it. */
+#custom-cpu-usage.normal,
+#custom-gpu-usage.normal {
+    color: #b1b9f9;               /* blue */
+}
+
+#custom-cpu-usage.busy,
+#custom-gpu-usage.busy {
+    color: #d77757;               /* Claude orange */
 }
 
 /* The one green on the bar, and the only chip that is an identity colour

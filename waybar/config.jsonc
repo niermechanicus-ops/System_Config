@@ -18,7 +18,9 @@
     "modules-center": [],
     "modules-right": [
         "custom/rgb",
+        "custom/cpu-usage",
         "custom/cpu-temp",
+        "custom/gpu-usage",
         "custom/gpu-temp",
         "custom/scarlett",
         "pulseaudio",
@@ -62,6 +64,26 @@
         "tooltip": true,
         "on-click": "~/.config/waybar/scripts/rgb-menu.sh",
         "on-click-right": "~/.config/waybar/scripts/rgb-menu.sh toggle"
+    },
+
+    // Usage chips sit directly left of their device's temp chip, so each pair
+    // reads as one unit: CPU load, CPU temp, GPU load, GPU temp.
+    "custom/cpu-usage": {
+        "exec": "~/.config/waybar/scripts/cpu-usage.sh",
+        "return-type": "json",
+        // The script averages over the gap between runs, so this is also the
+        // averaging window.
+        "interval": 5,
+        "format": "󰻠  {text}",
+        "tooltip": true
+    },
+
+    "custom/gpu-usage": {
+        "exec": "~/.config/waybar/scripts/gpu-usage.sh",
+        "return-type": "json",
+        "interval": 5,
+        "format": "󰾲  {text}",
+        "tooltip": true
     },
 
     "custom/cpu-temp": {
