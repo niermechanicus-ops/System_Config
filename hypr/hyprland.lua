@@ -384,7 +384,15 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+-- A tiled window can't get smaller than its tile (a lone window always fills
+-- the screen), so float it first. Nothing to undo on release: SUPER+V re-tiles.
+hl.bind(mainMod .. " + mouse:273", function()
+	local win = hl.get_active_window()
+	if win and not win.floating then
+		hl.dispatch(hl.dsp.window.float({ action = "enable" }))
+	end
+	hl.dispatch(hl.dsp.window.resize())
+end, { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind(
