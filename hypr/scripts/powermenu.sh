@@ -59,8 +59,18 @@ choice=$(printf '%s\n%s\n' "$reboot_entry" "$poweroff_entry" \
 # runs --post-cmd. It runs in its own scope because this script inherits
 # wayland-wm@hyprland.desktop.service's cgroup, which systemd kills once Hyprland
 # exits — before the post-cmd would get to run.
+#
+# hyprshutdown fires --post-cmd as soon as Hyprland drops its Wayland socket, but
+# Hyprland still needs ~150ms to release DRM after that; powering off inside that
+# window still segfaulted it (2026-10-08). So the post-cmd waits for the Hyprland
+# process itself to be gone (capped at 5s) before the power action.
 graceful() {
-	systemd-run --user --scope --quiet -- hyprshutdown --post-cmd "$1"
+	local pid
+	pid=$(pgrep -xo Hyprland || true)
+	local wait_cmd=":"
+	[[ -n $pid ]] && wait_cmd="timeout 5 tail --pid=$pid -s 0.1 -f /dev/null"
+	systemd-run --user --scope --quiet -- \
+		hyprshutdown --post-cmd "$wait_cmd; $1"
 }
 
 case "$choice" in
