@@ -1,4 +1,10 @@
+aseprite
 catppuccin-gtk-theme-mocha
+curseforge-appimage
 davinci-resolve
+minecraft-launcher
+openai-codex-bin
 papirus-folders-catppuccin-git
+unityhub
+visual-studio-code-bin
 yay
