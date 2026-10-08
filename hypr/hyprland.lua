@@ -109,6 +109,9 @@ hl.env("HYPRCURSOR_THEME", "catppuccin-mocha-white")
 -- Force the NVIDIA VA-API backend (this box also has an AMD iGPU, so libva
 -- would otherwise pick radeonsi and hardware video decode would silently fail)
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
+-- Firefox's sandboxed video-decode (RDD) process can't open /dev/nvidia*, so
+-- the NVIDIA VA-API driver fails inside it and video falls back to the CPU
+hl.env("MOZ_DISABLE_RDD_SANDBOX", "1")
 
 -- Force the Breeze Qt widget style so KDE apps (Dolphin) actually render the
 -- Catppuccin kdeglobals color scheme, instead of falling back to plain Fusion
