@@ -8,7 +8,7 @@
 # every device on each call), so it's started in the background and the
 # chip repaints straight away.
 #
-# rofi is pinned to DP-3 because that is the only output carrying the bar;
+# rofi is pinned to DP-1 because that is the only output carrying the bar;
 # otherwise it opens wherever keyboard focus happens to be.
 set -uo pipefail
 
@@ -55,13 +55,13 @@ rows+=("󰏘  Custom hex…" "󰌶  Off")
 [[ $current == 000000 ]] && selected=$((${#rows[@]} - 1))
 
 choice=$(printf '%s\n' "${rows[@]}" |
-	rofi -dmenu -m DP-3 -l "${#rows[@]}" -i -markup-rows -no-custom -format i -selected-row "$selected" -p "RGB") || exit 0
+	rofi -dmenu -m DP-1 -l "${#rows[@]}" -i -markup-rows -no-custom -format i -selected-row "$selected" -p "RGB") || exit 0
 
 n=${#presets[@]}
 if ((choice < n)); then
 	apply "${presets[$choice]#*|}"
 elif ((choice == n)); then
-	hex=$(rofi -dmenu -m DP-3 -p "Hex colour" -mesg "e.g. FF3000 (current #$current)" </dev/null) || exit 0
+	hex=$(rofi -dmenu -m DP-1 -p "Hex colour" -mesg "e.g. FF3000 (current #$current)" </dev/null) || exit 0
 	hex=${hex#\#}
 	if [[ $hex =~ ^[0-9A-Fa-f]{6}$ ]]; then
 		apply "$hex"

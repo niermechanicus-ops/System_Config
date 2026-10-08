@@ -20,8 +20,8 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 -- Explicit rules must come before the wildcard fallback (first match wins per monitor)
-hl.monitor({ output = "DP-3", mode = "3840x2160@240", position = "1920x0", scale = 1 })
-hl.monitor({ output = "HDMI-A-2", mode = "1920x1080@165", position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-1", mode = "3840x2160@240", position = "1920x0", scale = 1 })
+hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@165", position = "0x0", scale = 1 })
 
 hl.monitor({
 	output = "",
@@ -76,10 +76,10 @@ hl.on("hyprland.start", function()
 	-- The system polkitd daemon is NOT this — it's the arbiter, not the UI.
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
 
-	-- Tell Xwayland that DP-3, not HDMI-A-2, is the primary output.
+	-- Tell Xwayland that DP-1, not HDMI-A-1, is the primary output.
 	--
 	-- Hyprland has no "primary monitor" concept, so Xwayland hands X clients
-	-- its outputs in its own order and HDMI-A-2 (1920x1080) came first. Wine
+	-- its outputs in its own order and HDMI-A-1 (1920x1080) came first. Wine
 	-- maps the X primary to \.\DISPLAY1, so every Proton game enumerated
 	-- display modes off the 1080p panel and capped its fullscreen resolution
 	-- there — Dark Souls II went fullscreen on the 4K screen but only drew
@@ -88,7 +88,7 @@ hl.on("hyprland.start", function()
 	--
 	-- Retried in a loop because Xwayland is started lazily: at hyprland.start
 	-- there is usually no X server to talk to yet.
-	hl.exec_cmd([[bash -c 'for i in $(seq 1 60); do xrandr --output DP-3 --primary 2>/dev/null && exit 0; sleep 1; done']])
+	hl.exec_cmd([[bash -c 'for i in $(seq 1 60); do xrandr --output DP-1 --primary 2>/dev/null && exit 0; sleep 1; done']])
 end)
 
 -- Waybar runs in the "bottom" layer (see waybar/config.jsonc) so fullscreen
@@ -366,10 +366,10 @@ end
 
 -- Workspaces 1-5 live on the 4K main monitor, 6-10 (SUPER+0 = 10) on the smaller one
 for i = 1, 5 do
-	hl.workspace_rule({ workspace = tostring(i), monitor = "DP-3" })
+	hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
 end
 for i = 6, 10 do
-	hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-2" })
+	hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-1" })
 end
 
 -- Example special workspace (scratchpad)
@@ -446,7 +446,7 @@ hl.window_rule({
 	float = true,
 	size = { "monitor_w * 0.6", "monitor_h * 0.65" },
 	center = true,
-	monitor = "DP-3",
+	monitor = "DP-1",
 	workspace = "special:scratchpad silent",
 	rounding = 12,
 	animation = "popin",
@@ -507,12 +507,12 @@ hl.window_rule({
 -- The game runs under Proton/XWayland as ff7_en.exe (7th Heaven launches the
 -- classic 32-bit exe from ff7/workingdir, not the 64-bit FFVII.exe). FFNx is
 -- set to borderless 3840x2160 in that folder's FFNx.toml; this rule pins it to
--- DP-3 so it can't land on the 1080p panel. ALT+ENTER toggles fullscreen.
+-- DP-1 so it can't land on the 1080p panel. ALT+ENTER toggles fullscreen.
 hl.window_rule({
 	name = "ff7-fullscreen",
 	match = { class = "(?i)^ff7_en\\.exe$" },
 
-	monitor = "DP-3",
+	monitor = "DP-1",
 	fullscreen = true,
 })
 
@@ -522,7 +522,7 @@ hl.window_rule({
 	name = "seventh-heaven-manager",
 	match = { class = "(?i)^7th ?heaven\\.exe$" },
 
-	monitor = "DP-3",
+	monitor = "DP-1",
 	float = true,
 	center = true,
 })
@@ -537,7 +537,7 @@ hl.window_rule({
 	name = "pavucontrol-float",
 	match = { class = "^org\\.pulseaudio\\.pavucontrol$" },
 
-	monitor = "DP-3",
+	monitor = "DP-1",
 	float = true,
 	size = { "monitor_w * 0.42", "monitor_h * 0.55" },
 	center = true,
@@ -547,7 +547,7 @@ hl.window_rule({
 	name = "scarlett-gui-float",
 	match = { class = "^vu\\.b4\\.alsa-scarlett-gui$" },
 
-	monitor = "DP-3",
+	monitor = "DP-1",
 	float = true,
 	center = true,
 })
