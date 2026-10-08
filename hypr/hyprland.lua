@@ -365,11 +365,13 @@ for i = 1, 10 do
 end
 
 -- Workspaces 1-5 live on the 4K main monitor, 6-10 (SUPER+0 = 10) on the smaller one
+-- default = true pins each monitor's startup workspace (1 / 6); without it Hyprland
+-- hands the monitors IDs 11/12 at login, which no SUPER+number bind can reach.
 for i = 1, 5 do
-	hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
+	hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1", default = (i == 1) })
 end
 for i = 6, 10 do
-	hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-1" })
+	hl.workspace_rule({ workspace = tostring(i), monitor = "HDMI-A-1", default = (i == 6) })
 end
 
 -- Example special workspace (scratchpad)
