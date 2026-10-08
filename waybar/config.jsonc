@@ -19,8 +19,8 @@
     "modules-right": [
         "custom/rgb",
         "custom/cpu-usage",
-        "custom/cpu-temp",
         "custom/gpu-usage",
+        "custom/cpu-temp",
         "custom/gpu-temp",
         "custom/scarlett",
         "pulseaudio",
@@ -66,8 +66,8 @@
         "on-click-right": "~/.config/waybar/scripts/rgb-menu.sh toggle"
     },
 
-    // Usage chips sit directly left of their device's temp chip, so each pair
-    // reads as one unit: CPU load, CPU temp, GPU load, GPU temp.
+    // Grouped by measurement, not by device: both usage chips, then both temp
+    // chips — CPU usage, GPU usage, CPU temp, GPU temp.
     "custom/cpu-usage": {
         "exec": "~/.config/waybar/scripts/cpu-usage.sh",
         "return-type": "json",

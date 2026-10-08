@@ -47,5 +47,8 @@
   "editor.renderLineHighlight": "all",
   "editor.bracketPairColorization.enabled": true,
   "window.titleBarStyle": "custom",
-  "window.menuBarVisibility": "toggle"
+  "window.menuBarVisibility": "toggle",
+  "chat.editor.fontSize": 16,
+  "chat.fontSize": 20,
+  "chat.viewSessions.orientation": "stacked"
 }
