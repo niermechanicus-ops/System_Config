@@ -27,6 +27,9 @@
         "clock#time"
     ],
 
+    // Icons are pixel-art glyphs from icons/PixelBarIcons.ttf (Private Use
+    // Area-B, U+100000+), not Nerd Font glyphs. They render as blank boxes in
+    // most editors; see icons/icons.py for what each one is.
     "custom/network": {
         "exec": "~/.config/waybar/scripts/network.sh",
         "return-type": "json",
@@ -73,7 +76,7 @@
         // The script averages over the gap between runs, so this is also the
         // averaging window.
         "interval": 5,
-        "format": "󰻠 {text}",
+        "format": "􀀀 {text}",
         "tooltip": true
     },
 
@@ -81,7 +84,7 @@
         "exec": "~/.config/waybar/scripts/gpu-usage.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰾲 {text}",
+        "format": "􀀁 {text}",
         "tooltip": true
     },
 
@@ -89,7 +92,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": " {text}",
+        "format": "􀀂 {text}",
         "tooltip": true
     },
 
@@ -97,15 +100,15 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰢮 {text}",
+        "format": "􀀃 {text}",
         "tooltip": true
     },
 
     "pulseaudio": {
-        "format": "{icon}  {volume}%",  // two spaces: the speaker glyphs overhang their cell
-        "format-muted": "  muted",
+        "format": "{icon} {volume}%",
+        "format-muted": "􀀇 muted",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["􀀄", "􀀅", "􀀆"]
         },
         // Was false. It is on now purely so the right-click below is
         // discoverable — there is no other way for the bar to advertise a

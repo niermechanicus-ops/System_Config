@@ -97,4 +97,4 @@ for i in "${!lines[@]}"; do
     tooltip+="${lines[$i]}"
 done
 
-printf '{"text":"%s","class":"%s","tooltip":"%s"}\n' "$text" "$class" "$tooltip"
+printf '{"text":"%s %s","class":"%s","tooltip":"%s"}\n' "􀀉" "$text" "$class" "$tooltip"

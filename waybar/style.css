@@ -5,7 +5,8 @@
  * grouping with a literal pipe character.
  *
  * Pixel-art pass (2026-10-09): Departure Mono at 22px, its native 11px grid
- * doubled, so one font pixel is 2px, and every frame below is a multiple of
+ * doubled, so one font pixel is 2px; icons come from our own PixelBar Icons
+ * font (icons/), drawn on the same grid, and every frame below is a multiple of
  * that same 2px so the boxes and the lettering share one pixel grid. No
  * border-radius anywhere, no blur anywhere. Each chip is a raised game-UI
  * button: 2px crust outline with notched corners, 2px bevel (light top-left,
@@ -20,7 +21,7 @@
  */
 
 * {
-    font-family: "DepartureMono Nerd Font", "JetBrainsMono Nerd Font", monospace;
+    font-family: "PixelBar Icons", "DepartureMono Nerd Font", "JetBrainsMono Nerd Font", monospace;
     font-size: 22px;
     /* Stops GTK reserving extra vertical space per widget, which otherwise
      * makes chips taller than their text and throws off centring. */

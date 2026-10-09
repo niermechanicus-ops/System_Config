@@ -12,8 +12,8 @@ color=$(cat "$STATE_DIR/color" 2>/dev/null || echo FF3000)
 help='\n\nLeft-click   choose colour\nRight-click   on / off'
 
 if [[ $color == 000000 ]]; then
-	printf '{"text":"󰌵 OFF","tooltip":"RGB off%s","class":"off"}\n' "$help"
+	printf '{"text":"􀀈 OFF","tooltip":"RGB off%s","class":"off"}\n' "$help"
 else
-	printf '{"text":"<span color=\\"#%s\\">󰌵</span> RGB","tooltip":"RGB #%s%s","class":"on"}\n' \
+	printf '{"text":"<span color=\\"#%s\\">􀀈</span> RGB","tooltip":"RGB #%s%s","class":"on"}\n' \
 		"$color" "$color" "$help"
 fi
