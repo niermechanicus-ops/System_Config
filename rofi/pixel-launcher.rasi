@@ -1,0 +1,106 @@
+/* Pixel-art app launcher (SUPER+SPACE), matching the waybar pixel pass.
+ *
+ * Only the launcher uses this file. The power menu and wallpaper picker
+ * keep catppuccin-mocha.rasi, because they layer their own -theme-str on it.
+ *
+ * Same rules as the bar: Departure Mono at 22px (its 11px grid doubled, so
+ * one font pixel = 2 screen px), every frame a multiple of 2px, no
+ * border-radius, no blur. Rofi has no box-shadow, so the bar's frame is
+ * built from nested borders instead: window = 4px crust, mainbox = 2px
+ * surface0 rim inside it.
+ *
+ * App icons are left out on purpose: they are smooth vector art and were
+ * the one thing on screen not on the pixel grid. To bring them back, set
+ * element { children: [ element-icon, element-text ]; }.
+ */
+
+@import "catppuccin-mocha.rasi"
+
+* {
+    crust:    #11111b;
+    mantle:   #181825;
+    surface1: #45475a;
+
+    /* Icon font first so it wins for its own glyphs (U+100000+) only. */
+    font: "PixelBar Icons, DepartureMono Nerd Font 22px";
+}
+
+window {
+    width:            760px;
+    padding:          0;
+    border:           4px;
+    border-color:     @crust;
+    border-radius:    0;
+    background-color: @bg0;
+}
+
+mainbox {
+    border:       2px;
+    border-color: @bg1;          /* surface0 rim */
+    padding:      18px;
+    spacing:      14px;
+    children:     [ inputbar, listview ];
+}
+
+/* Sunken search box: darker than the window, crust outline. */
+inputbar {
+    background-color: @mantle;
+    border:           2px;
+    border-color:     @crust;
+    border-radius:    0;
+    padding:          10px 14px;
+    spacing:          14px;
+    children:         [ textbox-search, entry ];
+}
+
+textbox-search {
+    expand:     false;
+    content:    "􀀊";
+    text-color: @accent;
+    vertical-align: 0.5;
+}
+
+entry {
+    placeholder:       "Search...";
+    placeholder-color: @fg1;
+    vertical-align:    0.5;
+}
+
+listview {
+    lines:     8;
+    spacing:   6px;
+    scrollbar: false;
+}
+
+/* Every row carries the same border (transparent when idle), so selecting
+ * one never shifts the text: 2px all round plus a 6px bottom edge. */
+element {
+    padding:          8px 14px;
+    border:           2px 2px 6px 2px;
+    border-color:     transparent;
+    border-radius:    0;
+    children:         [ element-text ];
+}
+
+/* Inherit, or the row's text-color never reaches the label and the
+ * selected row ends up light-on-mauve. */
+element-text {
+    vertical-align:   0.5;
+    text-color:       inherit;
+    background-color: transparent;
+}
+
+/* The selected row is a raised pixel button: mauve face, crust outline,
+ * and the thick bottom edge reads as the button's side, like a game menu.
+ * (Rofi borders take one colour, so the step is crust too.) */
+element selected.normal {
+    background-color: @accent;
+    text-color:       @crust;
+    border-color:     @crust;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg0;
+}

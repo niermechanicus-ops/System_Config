@@ -37,7 +37,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal = "kitty"
 local fileManager = "dolphin"
-local menu = "rofi -show drun"
+local menu = "rofi -show drun -theme pixel-launcher" -- pixel-art launcher, rofi/pixel-launcher.rasi
 
 -------------------
 ---- AUTOSTART ----
@@ -344,7 +344,7 @@ hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind("ALT + RETURN", hl.dsp.window.fullscreen())
 
 -- Custom launcher/app binds
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("rofi -show drun"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("firefox"))
 hl.bind(mainMod .. " + DELETE", hl.dsp.window.close())
