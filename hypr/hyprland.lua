@@ -103,12 +103,8 @@ end)
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
--- Pixel-art cursors drawn for this setup: source in cursors/, built into
--- icons/pixel-mocha-cursors. It is an XCursor-only theme, so Hyprland falls
--- back from hyprcursor to XCursor for it; anything it doesn't draw is
--- inherited from catppuccin-mocha-white (see its index.theme).
-hl.env("XCURSOR_THEME", "pixel-mocha")
-hl.env("HYPRCURSOR_THEME", "pixel-mocha")
+hl.env("XCURSOR_THEME", "catppuccin-mocha-white")
+hl.env("HYPRCURSOR_THEME", "catppuccin-mocha-white")
 
 -- Force the NVIDIA VA-API backend (this box also has an AMD iGPU, so libva
 -- would otherwise pick radeonsi and hardware video decode would silently fail)
