@@ -1,10 +1,16 @@
 {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    // Pixel-art Arch logo, drawn by arch-pixel.py on kitty's 14x28 cell
+    // grid. width/height are in cells and must match the PNG exactly
+    // (336px / 14 = 24, 336px / 28 = 12) so kitty shows it 1:1, unscaled.
+    // kitty-direct hands kitty the file path, so it needs no ImageMagick,
+    // but it only draws in kitty; other terminals show a blank space.
     "logo": {
-        "type": "builtin",
-        "source": "arch_small",
-        "padding": { "top": 3, "left": 2, "right": 2 },
-        "color": { "1": "#d77757", "2": "#d77757" }
+        "type": "kitty-direct",
+        "source": "~/.config/fastfetch/arch-pixel.png",
+        "width": 24,
+        "height": 12,
+        "padding": { "top": 1, "left": 2, "right": 3 }
     },
     "display": {
         "separator": "  ",

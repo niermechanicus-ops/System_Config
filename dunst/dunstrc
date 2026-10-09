@@ -5,9 +5,14 @@
 # built-in default (white box, black text), which is the one surface on the
 # desktop that still broke the theme.
 #
-# Shape deliberately mirrors waybar/style.css: 2px corner radius and a 2px
-# frame, so a notification reads as another chip from the same system rather
-# than as a floating card.
+# Shape deliberately mirrors waybar/style.css, so a notification reads as
+# another chip from the same system rather than as a floating card.
+#
+# Pixel-art pass (2026-10-09): Departure Mono at 22px (its 11px grid doubled,
+# same as the bar, rofi and kitty), square corners, and a 4px frame like the
+# bar's and rofi's crust outline. The frame keeps its urgency colour, since
+# that colour is what tells a normal notification from an error. Every size
+# below is a multiple of 2px so the box sits on the font's pixel grid.
 
 [global]
     # Same monitor as waybar (DP-3, the 4K panel). "mouse" would let popups
@@ -16,7 +21,7 @@
     follow = none
     monitor = 0
 
-    width = (300, 520)
+    width = (360, 640)
     height = (0, 400)
     origin = top-right
     # Clears waybar: 58px bar + 8px margin-top + 8px breathing room. The x
@@ -28,24 +33,27 @@
     progress_bar_height = 8
     progress_bar_frame_width = 0
     progress_bar_min_width = 200
-    progress_bar_max_width = 520
-    progress_bar_corner_radius = 2
+    progress_bar_max_width = 640
+    progress_bar_corner_radius = 0
 
     indicate_hidden = yes
     separator_height = 2
     padding = 12
-    horizontal_padding = 14
+    horizontal_padding = 16
     text_icon_padding = 10
-    frame_width = 2
-    corner_radius = 2
+    frame_width = 4
+    corner_radius = 0
     gap_size = 6
     separator_color = frame
     sort = yes
 
-    font = JetBrainsMono Nerd Font 11
+    # "px", not points: 11pt would land between grid sizes and blur.
+    font = DepartureMono Nerd Font 22px
     line_height = 0
     markup = full
-    format = "<b>%s</b>\n%b"
+    # The font has one weight, so <b> would make Pango smear a fake bold
+    # across the pixel grid. The title stands out in Claude orange instead.
+    format = "<span foreground='#d77757'>%s</span>\n%b"
     alignment = left
     vertical_alignment = center
     show_age_threshold = 60

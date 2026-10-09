@@ -4,31 +4,49 @@ set -euo pipefail
 wall_dir="$HOME/Documents/Wallpapers"
 state_file="$HOME/.config/hypr/hyprpaper.conf"
 
-# Thumbnail grid theme override for the image picker only (doesn't touch
-# the shared rofi theme used by drun/run/window/monitor-picker/confirm menus).
+# Pixel-art pass (2026-10-09): every menu here starts from the launcher's
+# pixel theme (~/.config/rofi/pixel-launcher.rasi: Departure Mono, square
+# crust frame with a rim, rows drawn as pixel buttons) and layers a small
+# -theme-str on top for this script only.
 #
-# Sized for the 4K panel this runs on: at 1100px the previews were small
-# enough that picking between similar wallpapers meant guessing.
+# The image grid. Sized for the 4K panel this runs on: at 1100px the
+# previews were small enough that picking between similar wallpapers meant
+# guessing.
 #
 # On the empty space around each thumbnail: rofi fits an icon inside a
 # SQUARE box whose side is `size`, and only `size` works — setting width and
 # height on element-icon is ignored (rofi 2.0.0 collapses the icon to a tiny
 # thumbnail instead). Wallpapers are 16:9, so ~44% of every box is
-# necessarily empty. That is invisible against the dark backdrop, but a
-# filled accent-coloured selection paints those bands solid and makes them
-# very obvious — so selection is a muted surface fill with accent text
-# rather than a solid mauve block. Removing the gap entirely would mean
-# pre-generating square cropped thumbnails, which would drag in ImageMagick
-# and a cache to keep warm; not worth it for a picker.
+# necessarily empty. A filled accent-coloured selection (the launcher's
+# mauve button face) would paint those bands solid, so the selected tile
+# keeps a surface0 face and shows the selection as a mauve button outline
+# instead. Removing the gap entirely would mean pre-generating square
+# cropped thumbnails, which would drag in ImageMagick and a cache to keep
+# warm; not worth it for a picker.
 grid_theme='
-window { width: 1960px; padding: 18px; border: 0; }
-mainbox { spacing: 14px; }
-listview { columns: 3; lines: 2; spacing: 10px; scrollbar: false; }
-element { orientation: vertical; padding: 6px; border-radius: 10px; spacing: 4px; }
-element-icon { size: 600px; horizontal-align: 0.5; }
+window   { width: 1960px; }
+listview { columns: 3; lines: 2; spacing: 10px; }
+entry    { placeholder: "Wallpaper..."; }
+element  { orientation: vertical; padding: 6px; spacing: 4px;
+           children: [ element-icon, element-text ]; }
+element-icon { size: 600px; horizontal-align: 0.5; background-color: transparent; }
 element-text { horizontal-align: 0.5; }
-element selected.normal { background-color: #313244; text-color: #af87ff; }
+element selected.normal { background-color: @bg1; text-color: @accent; border-color: @accent; }
 '
+
+# The small follow-up menus: no search bar, exactly as many rows as there are
+# choices, labels centred in their buttons (like the power menu). The prompt
+# that used to sit in the search bar moves to a message line above the rows.
+small_theme() {
+    printf '%s' "
+window   { width: 760px; }
+mainbox  { children: [ message, listview ]; }
+listview { lines: $1; }
+element-text { horizontal-align: 0.5; }
+textbox  { horizontal-align: 0.5; }
+message  { padding: 0 0 6px 0; }
+"
+}
 
 mapfile -t images < <(find "$wall_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -printf "%f\n" | sort)
 
@@ -93,7 +111,7 @@ while true; do
     chosen=$(
         for img in "${images[@]}"; do
             printf '%s\x00icon\x1f%s\n' "$img" "$wall_dir/$img"
-        done | rofi -dmenu -i -show-icons -p "Wallpaper" -theme-str "$grid_theme"
+        done | rofi -dmenu -i -show-icons -theme pixel-launcher -theme-str "$grid_theme"
     )
     [ -z "${chosen:-}" ] && exit 0
     img_path="$wall_dir/$chosen"
@@ -103,12 +121,15 @@ while true; do
     # once per monitor — four entries for two displays. Emit the monitors
     # with a single-placeholder format, then append the extra option once.
     target=$({ printf '%s\n' "${monitors[@]}"; echo "All monitors"; } \
-        | rofi -dmenu -i -p "Preview on")
+        | rofi -dmenu -i -no-custom -mesg "Preview on" \
+            -theme pixel-launcher -theme-str "$(small_theme $(( ${#monitors[@]} + 1 )))")
     [ -z "${target:-}" ] && exit 0
 
     apply_to "$target" "$img_path"
 
-    decision=$(printf "Keep\nTry another wallpaper\nRevert\n" | rofi -dmenu -i -p "Applied — check both monitors" -mesg "$chosen -> $target")
+    decision=$(printf "Keep\nTry another wallpaper\nRevert\n" \
+        | rofi -dmenu -i -no-custom -mesg "Check both monitors: $chosen -> $target" \
+            -theme pixel-launcher -theme-str "$(small_theme 3)")
 
     case "$decision" in
         Keep)
