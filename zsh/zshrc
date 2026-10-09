@@ -114,17 +114,7 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# The pixel-art logo is a kitty image, which other terminals (VS Code's, a
-# TTY) can't draw; they get fastfetch's built-in text logo in the same orange.
-if command -v fastfetch >/dev/null 2>&1; then
-    if [[ $TERM == xterm-kitty ]]; then
-        fastfetch
-    else
-        fastfetch --logo-type builtin --logo arch_small \
-            --logo-color-1 '#d77757' --logo-color-2 '#d77757'
-    fi
-    echo
-fi
+command -v fastfetch >/dev/null 2>&1 && fastfetch && echo
 
 # ---- fzf + zoxide ----
 #
