@@ -171,11 +171,11 @@ window#waybar {
     color: #b1b9f9;               /* blue */
 }
 
-/* The bulb glyph is coloured inline by scripts/rgb.sh with the actual LED
- * colour, so the chip is its own swatch; the label stays plain text so the
- * chip doesn't add an orange that would read as a "warm" state. */
+/* Same blue as the other idle chips. The gem used to be drawn in the live
+ * LED colour, but that put an off-palette colour on the bar (and a red LED
+ * looked like a warning); the actual colour is in the tooltip instead. */
 #custom-rgb.on {
-    color: #cdd6f4;               /* text */
+    color: #b1b9f9;               /* blue */
 }
 
 #custom-rgb.off {
