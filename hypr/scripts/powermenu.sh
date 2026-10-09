@@ -12,33 +12,48 @@ poweroff_entry="􀀌 Power Off"
 # it, for this invocation only: no search bar, exactly two rows, narrow.
 # Icons are PixelBar Icons glyphs (waybar/icons/icons.py: reboot, power).
 #
-# Colors: warm/umber shift of Mocha rather than the mauve accent, kept from
-# before the pixel pass. The mauve selection was unreadable because the old
-# shared theme painted the selected label in @bg0, which carries an "ee"
-# alpha, so dark text went translucent over bright purple. Every colour used
-# for the selection below is fully opaque.
+# Colours: the bar's two oranges rather than the launcher's mauve, so the
+# menu reads as "this one's serious". Claude orange (#d77757) is the frame
+# rim and the selected button's face; the clock's shimmer orange (#f59575) is
+# the idle text. Selected text is opaque crust, so it stays solid on the
+# orange face (the old shared theme used translucent @bg0 there, which is
+# what made an earlier mauve version unreadable).
+#
+# Centring: rofi centres in the area below the bar (66px), which put the menu
+# 32px low. It ignores y-offset when centred, so an empty 64px bottom margin
+# is used instead: centring the window plus margin lifts the visible menu by
+# 32px, to the true middle of the 4K screen. (On the 1080p monitor, which has
+# no bar, it therefore sits 32px above centre.) Labels are centred inside
+# their buttons too.
 theme_str='
 * {
-    umber-bg:    #1e1b19f5;  /* warm-shifted Mocha base                  */
-    umber-sel:   #402319;    /* deep umber, Claude orange toward mantle  */
-    umber-line:  #5c3122;    /* one step up, for the frame rim           */
-    umber-crust: #120f0e;    /* warm crust, for outlines                 */
-    sel-fg:      #f59575;    /* Claude shimmer orange, opaque            */
+    warm-bg:     #1e1b19f5;  /* warm-shifted Mocha base           */
+    warm-crust:  #120f0e;    /* warm crust, for outlines          */
+    claude:      #d77757;    /* Claude orange: rim, selected face */
+    shimmer:     #f59575;    /* clock orange: idle text           */
 }
 
 window {
-    background-color: @umber-bg;
-    border-color:     @umber-crust;
+    background-color: @warm-bg;
+    border-color:     @warm-crust;
     width:            400px;
+    margin:           0 0 64px 0;
 }
 
-mainbox  { children: [ listview ]; border-color: @umber-line; }
+mainbox  { children: [ listview ]; border-color: @claude; }
 listview { lines: 2; }
 
+element-text { horizontal-align: 0.5; }
+
+element normal.normal,
+element alternate.normal {
+    text-color: @shimmer;
+}
+
 element selected.normal {
-    background-color: @umber-sel;
-    text-color:       @sel-fg;
-    border-color:     @umber-crust;
+    background-color: @claude;
+    text-color:       @warm-crust;
+    border-color:     @warm-crust;
 }
 '
 
