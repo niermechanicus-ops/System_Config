@@ -103,8 +103,12 @@ end)
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
-hl.env("XCURSOR_THEME", "catppuccin-mocha-white")
-hl.env("HYPRCURSOR_THEME", "catppuccin-mocha-white")
+-- Pixel-art cursors drawn for this setup: source in cursors/, built into
+-- icons/pixel-mocha-cursors. It is an XCursor-only theme, so Hyprland falls
+-- back from hyprcursor to XCursor for it; anything it doesn't draw is
+-- inherited from catppuccin-mocha-white (see its index.theme).
+hl.env("XCURSOR_THEME", "pixel-mocha")
+hl.env("HYPRCURSOR_THEME", "pixel-mocha")
 
 -- Force the NVIDIA VA-API backend (this box also has an AMD iGPU, so libva
 -- would otherwise pick radeonsi and hardware video decode would silently fail)
@@ -209,22 +213,21 @@ hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 -- Default springs
 hl.curve("easy", { type = "spring", mass = 1, stiffness = 238.1191, dampening = 24.21279333 })
 
+-- Pixel-art pass (2026-10-09): retro-snappy rather than smooth. Everything
+-- is short and has no bounce; fades are off so things appear and vanish
+-- crisply like a game menu instead of dissolving. Speeds are in 100ms units.
+hl.curve("snap", { type = "bezier", points = { { 0.1, 0.9 }, { 0.2, 1 } } })
+
 hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows", enabled = true, speed = 7, spring = "easy" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 6, spring = "easy", style = "popin 87%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 2.3, bezier = "linear", style = "popin 87%" })
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
-hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
-hl.animation({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
-hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.21, bezier = "almostLinear", style = "fade" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
+hl.animation({ leaf = "windows", enabled = true, speed = 1.5, bezier = "snap" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1.2, bezier = "snap", style = "popin 80%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1, bezier = "linear", style = "popin 80%" })
+hl.animation({ leaf = "fade", enabled = false })
+-- Bar, launcher and notifications pop in instantly.
+hl.animation({ leaf = "layers", enabled = false })
+-- Workspaces scroll sideways like a screen transition in an old game.
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.8, bezier = "snap", style = "slide" })
 hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
 
 -- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
