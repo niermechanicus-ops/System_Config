@@ -48,5 +48,13 @@ fb.setupOS2(sTypoAscender=ASC, sTypoDescender=-DESC, sTypoLineGap=0,
             usWinAscent=ASC, usWinDescent=DESC, sCapHeight=8 * PX)
 fb.setupPost()
 out = os.path.join(here, "PixelBarIcons.ttf")
-fb.save(out)
-print("wrote", out)
+# Write a new file and rename it over the old one, never rewrite in place:
+# programs that already have the font open (waybar, rofi) map the file, and
+# rewriting the same file under them leaves their cached glyph widths out of
+# step with the new data, which collapsed the gap after every bar icon
+# (2026-10-09). A rename gives the new font a fresh inode instead.
+tmp = out + ".tmp"
+fb.save(tmp)
+os.replace(tmp, out)
+os.system("fc-cache -f ~/.local/share/fonts")
+print("wrote", out, "- now restart waybar: pkill -x waybar; setsid -f waybar")
