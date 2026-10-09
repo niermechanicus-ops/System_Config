@@ -1,55 +1,51 @@
 #!/usr/bin/env bash
 # Power menu — SUPER + ESCAPE.
-# Two options, rofi-driven, Catppuccin Mocha (inherits ~/.config/rofi/catppuccin-mocha.rasi).
+# Two options, rofi-driven. Built on the pixel-art launcher theme
+# (~/.config/rofi/pixel-launcher.rasi) with the warm umber colours below.
 set -euo pipefail
 
-reboot_entry="  Reboot"
-poweroff_entry="  Power Off"
+reboot_entry="􀀋 Reboot"
+poweroff_entry="􀀌 Power Off"
 
-# Compact override scoped to this invocation only — no search bar, exactly two
-# rows, narrow window. Doesn't touch the shared theme file.
+# Pixel-art pass (2026-10-09): starts from pixel-launcher.rasi (pixel font,
+# square crust frame with a rim, rows drawn as pixel buttons) and overrides
+# it, for this invocation only: no search bar, exactly two rows, narrow.
+# Icons are PixelBar Icons glyphs (waybar/icons/icons.py: reboot, power).
 #
-# Angular: every border-radius is 0, overriding the 12px/8px rounding the shared
-# catppuccin-mocha.rasi sets.
-#
-# Colors: warm/umber shift of Mocha rather than the mauve accent. The mauve
-# selection was unreadable because the shared theme paints the selected label in
-# @bg0 — which carries an "ee" alpha — so dark text went translucent over bright
-# purple. Both selection colors below are fully opaque.
+# Colors: warm/umber shift of Mocha rather than the mauve accent, kept from
+# before the pixel pass. The mauve selection was unreadable because the old
+# shared theme painted the selected label in @bg0, which carries an "ee"
+# alpha, so dark text went translucent over bright purple. Every colour used
+# for the selection below is fully opaque.
 theme_str='
 * {
-    umber-bg:   #1e1b19f5;  /* warm-shifted Mocha base                  */
-    umber-sel:  #402319;    /* deep umber, Claude orange toward mantle  */
-    umber-line: #5c3122;    /* one step up, for the frame               */
-    sel-fg:     #f59575;    /* Claude shimmer orange, opaque            */
+    umber-bg:    #1e1b19f5;  /* warm-shifted Mocha base                  */
+    umber-sel:   #402319;    /* deep umber, Claude orange toward mantle  */
+    umber-line:  #5c3122;    /* one step up, for the frame rim           */
+    umber-crust: #120f0e;    /* warm crust, for outlines                 */
+    sel-fg:      #f59575;    /* Claude shimmer orange, opaque            */
 }
 
 window {
     background-color: @umber-bg;
-    border:           2px;
-    border-color:     @umber-line;
-    border-radius:    0;
-    width:            340px;
-    padding:          14px;
+    border-color:     @umber-crust;
+    width:            400px;
 }
 
-mainbox  { children: [ listview ]; }
-listview { lines: 2; spacing: 6px; }
-
-element {
-    padding:       12px 14px;
-    border-radius: 0;
-}
+mainbox  { children: [ listview ]; border-color: @umber-line; }
+listview { lines: 2; }
 
 element selected.normal {
     background-color: @umber-sel;
     text-color:       @sel-fg;
+    border-color:     @umber-crust;
 }
 '
 
 choice=$(printf '%s\n%s\n' "$reboot_entry" "$poweroff_entry" \
 	| rofi -dmenu -i \
 		-no-custom \
+		-theme pixel-launcher \
 		-theme-str "$theme_str" \
 		|| true)
 
