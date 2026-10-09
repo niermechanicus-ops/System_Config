@@ -73,7 +73,7 @@
         // The script averages over the gap between runs, so this is also the
         // averaging window.
         "interval": 5,
-        "format": "󰻠  {text}",
+        "format": "󰻠 {text}",
         "tooltip": true
     },
 
@@ -81,7 +81,7 @@
         "exec": "~/.config/waybar/scripts/gpu-usage.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰾲  {text}",
+        "format": "󰾲 {text}",
         "tooltip": true
     },
 
@@ -89,7 +89,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "  {text}",
+        "format": " {text}",
         "tooltip": true
     },
 
@@ -97,12 +97,12 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "󰢮  {text}",
+        "format": "󰢮 {text}",
         "tooltip": true
     },
 
     "pulseaudio": {
-        "format": "{icon}  {volume}%",
+        "format": "{icon}  {volume}%",  // two spaces: the speaker glyphs overhang their cell
         "format-muted": "  muted",
         "format-icons": {
             "default": ["", "", ""]

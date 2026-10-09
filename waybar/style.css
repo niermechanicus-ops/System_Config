@@ -5,10 +5,11 @@
  * grouping with a literal pipe character.
  *
  * Pixel-art pass (2026-10-09): Departure Mono at 22px, its native 11px grid
- * doubled, so one font pixel is 2px. Everything else sits on that grid: no
- * border-radius anywhere, and each chip is drawn like a raised game-UI button
- * with box-shadows (no blur, ever): a 4px crust outline with the corners
- * notched out and a 4px bevel (light top, dark bottom). Colours are unchanged; only shapes and the font moved.
+ * doubled, so one font pixel is 2px, and every frame below is a multiple of
+ * that same 2px so the boxes and the lettering share one pixel grid. No
+ * border-radius anywhere, no blur anywhere. Each chip is a raised game-UI
+ * button: 2px crust outline with notched corners, 2px bevel (light top-left,
+ * dark bottom-right). The bar is a two-tone window frame around them. Colours are unchanged; only shapes and the font moved.
  *
  * Palette: Catppuccin Mocha neutrals, Claude Code accents — see PALETTE.md.
  *
@@ -29,9 +30,9 @@
 tooltip {
     font-family: "DepartureMono Nerd Font", "JetBrainsMono Nerd Font", monospace;
     background: #181825;
-    border: 4px solid #45475a;
+    border: 4px solid #11111b;
     border-radius: 0;
-    box-shadow: inset 0 0 0 4px #11111b;
+    box-shadow: inset 0 0 0 2px #313244;
 }
 
 tooltip label {
@@ -39,34 +40,28 @@ tooltip label {
     padding: 4px;
 }
 
-/* The bar itself is a sunken panel: crust frame, then a 4px inset bevel that
- * is dark along the top and light along the bottom, the reverse of the chips,
- * so the chips read as buttons sitting in a tray. Inset only: an outer
- * shadow would be clipped by the layer surface. */
+/* The bar is a pixel window frame: 4px crust border, then a 2px surface0
+ * rim inside it. Inset only, since an outer shadow would be clipped by the
+ * layer surface. GTK paints this frame *over* the window's children rather
+ * than insetting them, so the chip margins below must clear its 6px. */
 window#waybar {
     background: rgba(30, 30, 46, 0.92); /* base */
     color: #cdd6f4;
     border-radius: 0;
     border: 4px solid #11111b;      /* crust */
-    box-shadow:
-        inset 0 4px 0 0 #181825,    /* mantle, top shade */
-        inset 0 -4px 0 0 #313244;   /* surface0, bottom light */
+    box-shadow: inset 0 0 0 2px #313244; /* surface0 rim */
 }
 
 /* ---- shared chip shape -------------------------------------------------
  * Every module gets the same box so the bar reads as one system.
- *   margin 8px vertical -> the 4px outline is drawn outside the box, so
- *     this leaves it a 4px gap from the bar's own frame
- *   margin 9px horizontal -> 4px outline each side + a 10px visible gap
- *   padding 0 18px -> breathing room inside each chip
+ *   margin 12px vertical -> 6px bar frame + 2px chip outline + a clear 4px
+ *     of base, top and bottom alike (58 = 12 + 34px chip + 12; the font's
+ *     line box is 28px, so the face keeps 3px above and below the text)
+ *   margin 6px horizontal -> 2px outline each side + an 8px visible gap
+ *   padding 0 16px -> breathing room inside each chip
  *
- * The four offset outer shadows build the outline; because each one only
- * covers its own edge, the corners stay empty, which is the notched pixel
- * corner.
- *
- * The gap between a module's icon and its value is set in config.jsonc
- * (two spaces in each "format" string), not here — GTK CSS has no way to
- * space the parts of a single label.
+ * The four offset outer shadows build the outline; each covers only its own
+ * edge, so the 2x2 corners stay empty, which is the notched pixel corner.
  */
 #clock.date,
 #clock.time,
@@ -79,17 +74,17 @@ window#waybar {
 #pulseaudio {
     background: #313244;          /* surface0 */
     border-radius: 0;
-    margin: 8px 9px;
-    padding: 0 18px;
+    margin: 12px 6px;
+    padding: 0 16px;
     color: #cdd6f4;
     text-shadow: 2px 2px 0 #11111b;   /* one font pixel, crust */
     box-shadow:
-        inset 0 4px 0 0 #45475a,  /* surface1, top bevel */
-        inset 0 -4px 0 0 #181825, /* mantle, bottom bevel */
-        0 -4px 0 0 #11111b,
-        0 4px 0 0 #11111b,
-        -4px 0 0 0 #11111b,
-        4px 0 0 0 #11111b;
+        inset 2px 2px 0 0 #45475a,    /* surface1, top-left light */
+        inset -2px -2px 0 0 #181825,  /* mantle, bottom-right shade */
+        0 -2px 0 0 #11111b,
+        0 2px 0 0 #11111b,
+        -2px 0 0 0 #11111b,
+        2px 0 0 0 #11111b;
 }
 
 /* Clickable chips press in on hover: the bevel flips, so the face looks
@@ -98,16 +93,17 @@ window#waybar {
 #custom-rgb:hover,
 #pulseaudio:hover {
     box-shadow:
-        inset 0 4px 0 0 #181825,
-        inset 0 -4px 0 0 #45475a,
-        0 -4px 0 0 #11111b,
-        0 4px 0 0 #11111b,
-        -4px 0 0 0 #11111b,
-        4px 0 0 0 #11111b;
+        inset 2px 2px 0 0 #181825,
+        inset -2px -2px 0 0 #45475a,
+        0 -2px 0 0 #11111b,
+        0 2px 0 0 #11111b,
+        -2px 0 0 0 #11111b,
+        2px 0 0 0 #11111b;
 }
 
 /* Leftmost chip on the bar — mirror the clock's outside margin on the right
- * so both ends are held off the edge by the same amount. */
+ * so both ends are held off the edge by the same amount: 12px, the same
+ * clearance as top and bottom, so the frame-to-chip gap is 4px all round. */
 #custom-network {
     margin-left: 12px;
 }
@@ -199,7 +195,7 @@ window#waybar {
     /* Every chip is now the same family, size and weight — the modules are
      * distinguished by colour alone. The extra padding this chip used to
      * carry was compensating for bold being wider; at regular weight the
-     * shared 20px is enough, and the outside margin keeps the last digit
+     * shared 16px is enough, and the outside margin keeps the last digit
      * clear of the bar edge. */
     margin-right: 12px;
 }
