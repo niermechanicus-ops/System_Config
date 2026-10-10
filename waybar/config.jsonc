@@ -23,7 +23,7 @@
         "custom/cpu-temp",
         "custom/gpu-temp",
         "pulseaudio",
-        "clock#date",
+        "custom/date",
         "custom/clock"
     ],
 
@@ -56,27 +56,19 @@
         "on-click": "nm-connection-editor"
     },
 
-    "clock#date": {
-        // NOTE: waybar's clock uses C++ std::chrono format specs, not full
-        // strftime — %-d (unpadded day) is NOT supported and throws
-        // "chrono format error". Use %d.
-        "format": "{:%A, %B %d}",
-        // Hover for a month calendar; scroll over the date to flip months.
-        "tooltip-format": "<tt>{calendar}</tt>",
-        "calendar": {
-            "mode": "month",
-            "on-scroll": 1,
-            "format": {
-                "months":   "<span color='#f59575'>{}</span>",
-                "weekdays": "<span color='#f9e2af'>{}</span>",
-                "days":     "<span color='#f5e0dc'>{}</span>",
-                "today":    "<span background='#f5c2e7' color='#1e1e2e'>{}</span>"
-            }
-        },
-        "actions": {
-            "on-scroll-up": "shift_down",
-            "on-scroll-down": "shift_up"
-        }
+    // Date text plus a hover calendar drawn by the script itself in the
+    // pixel font (waybar's own {calendar} can colour days but not lay them
+    // out). Scroll over it to flip months; it snaps back to today after a
+    // minute. The script sends SIGRTMIN+10 to refresh after a scroll.
+    "custom/date": {
+        "exec": "~/.config/waybar/scripts/date-calendar.py",
+        "return-type": "json",
+        "interval": 60,
+        "signal": 10,
+        "format": "{}",
+        "tooltip": true,
+        "on-scroll-up": "~/.config/waybar/scripts/date-calendar.py shift -1",
+        "on-scroll-down": "~/.config/waybar/scripts/date-calendar.py shift 1"
     },
 
     // Replaces clock#time: sun/sunset/moon icon, colour drifts with the day.

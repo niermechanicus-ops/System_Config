@@ -49,7 +49,7 @@ tooltip {
 
 tooltip label {
     color: #f5e0dc;
-    padding: 4px;
+    padding: 8px 12px;   /* room for the calendar grid */
 }
 
 /* The bar is a pixel window frame: 4px crust border, then a 2px surface0
@@ -75,7 +75,7 @@ window#waybar {
  * The four offset outer shadows build the outline; each covers only its own
  * edge, so the 2x2 corners stay empty, which is the notched pixel corner.
  */
-#clock.date,
+#custom-date,
 #custom-clock,
 #workspaces,
 #custom-cpu-temp,
@@ -198,7 +198,7 @@ window#waybar {
     color: #ff6b80;               /* red */
 }
 
-#clock.date {
+#custom-date {
     color: #f5e0dc;               /* cream */
 }
 
