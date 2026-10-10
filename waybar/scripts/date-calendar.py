@@ -5,7 +5,7 @@
 #   date-calendar.py            print the bar JSON (date text + calendar tooltip)
 #   date-calendar.py shift N    move the shown month by N, then refresh the bar
 #
-# The tooltip is drawn in Departure Mono, so the grid lines, stars and the
+# The tooltip is drawn in Departure Mono, so the grid lines and the
 # today block are all on the font's pixel grid. Scrolling flips months; the
 # offset forgets itself after RESET seconds, so the next hover is back on
 # the current month.
@@ -44,8 +44,8 @@ m = today.month - 1 + read_offset()
 year, month = today.year + m // 12, m % 12 + 1
 
 title = f"{calendar.month_name[month].upper()} {year}"
-head = c(YELLOW, "★") + " " + c(PEACH, title) + " " + c(YELLOW, "★")
-pad = W - len(title) - 6
+head = c(PEACH, title)
+pad = W - len(title) - 2
 arrows_l, arrows_r = c(DIM, "←"), c(DIM, "→")
 lines = [arrows_l + " " * (pad // 2) + head + " " * (pad - pad // 2) + arrows_r,
          c(RULE, "━" * W),
