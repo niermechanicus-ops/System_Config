@@ -10,7 +10,14 @@
  * that same 2px so the boxes and the lettering share one pixel grid. No
  * border-radius anywhere, no blur anywhere. Each chip is a raised game-UI
  * button: 2px crust outline with notched corners, 2px bevel (light top-left,
- * dark bottom-right). The bar is a two-tone window frame around them. Colours are unchanged; only shapes and the font moved.
+ * dark bottom-right). The bar is a two-tone window frame around them.
+ *
+ * Comfy pass (2026-10-10): the frame and bevels are hue-shifted the way pixel
+ * artists shade, so highlights lean warm plum and shadows lean deep indigo
+ * rather than being flat greys. Idle text is warm cream (rosewater) instead
+ * of cool blue, and each icon carries its own soft pastel (set with <span>
+ * in config.jsonc and the scripts). Orange and red still only ever mean
+ * "look at me".
  *
  * Palette: Catppuccin Mocha neutrals, Claude Code accents — see PALETTE.md.
  *
@@ -18,6 +25,10 @@
  *           surface0 #313244  surface1 #45475a  overlay0 #6c7086
  * Accents:  orange #d77757  shimmer #f59575  green #4eba65
  *           blue #b1b9f9  red #ff6b80
+ * Comfy:    cream #f5e0dc (rosewater)   icons: yellow #f9e2af  flamingo #f2cdcd
+ *           lavender #b4befe  mauve #cba6f7  teal #94e2d5
+ *           chip ramp: light #4a4462  face #312c45  shade #1b1828
+ *           alert face #45283a (red-tinted, for muted/offline/hot)
  */
 
 * {
@@ -30,14 +41,14 @@
 
 tooltip {
     font-family: "DepartureMono Nerd Font", "JetBrainsMono Nerd Font", monospace;
-    background: #181825;
+    background: #1b1828;
     border: 4px solid #11111b;
     border-radius: 0;
-    box-shadow: inset 0 0 0 2px #313244;
+    box-shadow: inset 0 0 0 2px #4a4462;
 }
 
 tooltip label {
-    color: #cdd6f4;
+    color: #f5e0dc;
     padding: 4px;
 }
 
@@ -46,11 +57,11 @@ tooltip label {
  * layer surface. GTK paints this frame *over* the window's children rather
  * than insetting them, so the chip margins below must clear its 6px. */
 window#waybar {
-    background: rgba(30, 30, 46, 0.92); /* base */
-    color: #cdd6f4;
+    background: #1e1e2e;            /* base, solid: pixel art has no glass */
+    color: #f5e0dc;
     border-radius: 0;
     border: 4px solid #11111b;      /* crust */
-    box-shadow: inset 0 0 0 2px #313244; /* surface0 rim */
+    box-shadow: inset 0 0 0 2px #3b3552; /* plum rim */
 }
 
 /* ---- shared chip shape -------------------------------------------------
@@ -73,15 +84,15 @@ window#waybar {
 #custom-network,
 #custom-rgb,
 #pulseaudio {
-    background: #313244;          /* surface0 */
+    background: #312c45;          /* face — surface0 nudged toward mauve */
     border-radius: 0;
     margin: 12px 6px;
     padding: 0 16px;
-    color: #cdd6f4;
+    color: #f5e0dc;               /* cream */
     text-shadow: 2px 2px 0 #11111b;   /* one font pixel, crust */
     box-shadow:
-        inset 2px 2px 0 0 #45475a,    /* surface1, top-left light */
-        inset -2px -2px 0 0 #181825,  /* mantle, bottom-right shade */
+        inset 2px 2px 0 0 #4a4462,    /* warm plum light, top-left */
+        inset -2px -2px 0 0 #1b1828,  /* indigo shade, bottom-right */
         0 -2px 0 0 #11111b,
         0 2px 0 0 #11111b,
         -2px 0 0 0 #11111b,
@@ -93,9 +104,10 @@ window#waybar {
 #custom-network:hover,
 #custom-rgb:hover,
 #pulseaudio:hover {
+    background: #2a263b;
     box-shadow:
-        inset 2px 2px 0 0 #181825,
-        inset -2px -2px 0 0 #45475a,
+        inset 2px 2px 0 0 #1b1828,
+        inset -2px -2px 0 0 #4a4462,
         0 -2px 0 0 #11111b,
         0 2px 0 0 #11111b,
         -2px 0 0 0 #11111b,
@@ -109,24 +121,22 @@ window#waybar {
     margin-left: 12px;
 }
 
-/* Same blue as the idle temperature chips and the volume chip. With this the
- * bar has one colour language rather than a palette: blue is "fine", orange is
- * "warm", red is "something is wrong". Nothing on the bar is coloured merely to
- * tell it apart from its neighbour any more. */
+/* Idle text is cream on every chip, so the bar has one colour language for
+ * values: cream is "fine", orange is "warm", red is "something is wrong".
+ * Identity lives only in the pastel icon tints. */
 #custom-network.online {
-    color: #b1b9f9;               /* blue */
+    color: #f5e0dc;               /* cream */
 }
 
 #custom-network.offline {
     color: #ff6b80;               /* red */
     /* Tinted background as well as red text: this is the one module whose
      * bad state should be noticeable without looking straight at it. */
-    background: #45475a;          /* surface1 */
+    background: #45283a;          /* alert face */
 }
 
 /* ---- individual module colours ----------------------------------------
- * Colour is the only thing distinguishing modules now that the separators
- * are gone, so each keeps its own hue.
+ * Values share one cream; the icons (tinted in config.jsonc) carry identity.
  */
 /* The two temperature chips are the exception to "one hue per module": their
  * colour reports state instead of identity. Both share the same three steps so
@@ -134,13 +144,13 @@ window#waybar {
  * thresholds behind them differ (see the scripts — 75/88 for the CPU,
  * 78/86 for the GPU, since a 78°C GPU is unremarkable and a 78°C CPU is not).
  *
- * Idle is the same blue as the volume chip, deliberately: it puts both sensors
+ * Idle is the same cream as the volume chip, deliberately: it puts both sensors
  * in the "nothing to see here" state alongside the rest of the bar, so orange
  * and red are the only colours on the bar that ever mean "look at me".
  */
 #custom-cpu-temp.normal,
 #custom-gpu-temp.normal {
-    color: #b1b9f9;               /* blue — same as #pulseaudio */
+    color: #f5e0dc;               /* cream */
 }
 
 #custom-cpu-temp.warm,
@@ -151,15 +161,15 @@ window#waybar {
 #custom-cpu-temp.hot,
 #custom-gpu-temp.hot {
     color: #ff6b80;               /* red */
-    background: #45475a;          /* surface1 — same treatment as a muted sink */
+    background: #45283a;          /* alert face — same as a muted sink */
 }
 
-/* Usage chips use the same blue/orange as the temp chips but have no red
+/* Usage chips use the same cream/orange as the temp chips but have no red
  * step: 100% load is the hardware doing its job, not a fault. Orange from 85%
  * (see scripts/{cpu,gpu}-usage.sh) just flags that something is pegging it. */
 #custom-cpu-usage.normal,
 #custom-gpu-usage.normal {
-    color: #b1b9f9;               /* blue */
+    color: #f5e0dc;               /* cream */
 }
 
 #custom-cpu-usage.busy,
@@ -168,27 +178,27 @@ window#waybar {
 }
 
 #pulseaudio {
-    color: #b1b9f9;               /* blue */
+    color: #f5e0dc;               /* cream */
 }
 
-/* Same blue as the other idle chips. The gem used to be drawn in the live
+/* Same cream as the other idle chips. The gem used to be drawn in the live
  * LED colour, but that put an off-palette colour on the bar (and a red LED
  * looked like a warning); the actual colour is in the tooltip instead. */
 #custom-rgb.on {
-    color: #b1b9f9;               /* blue */
+    color: #f5e0dc;               /* cream */
 }
 
 #custom-rgb.off {
-    color: #6c7086;               /* overlay0 — dimmed, like an unlit bulb */
+    color: #7f7896;               /* overlay0 — dimmed, like an unlit bulb */
 }
 
 #pulseaudio.muted {
-    background: #45475a;          /* surface1 — muted reads as inactive */
+    background: #45283a;          /* alert face */
     color: #ff6b80;               /* red */
 }
 
 #clock.date {
-    color: #cdd6f4;               /* text */
+    color: #f5e0dc;               /* cream */
 }
 
 #clock.time {

@@ -76,7 +76,7 @@
         // The script averages over the gap between runs, so this is also the
         // averaging window.
         "interval": 5,
-        "format": "􀀀 {text}",
+        "format": "<span color='#f9e2af'>􀀀</span> {text}",
         "tooltip": true
     },
 
@@ -84,7 +84,7 @@
         "exec": "~/.config/waybar/scripts/gpu-usage.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "􀀁 {text}",
+        "format": "<span color='#f9e2af'>􀀁</span> {text}",
         "tooltip": true
     },
 
@@ -92,7 +92,7 @@
         "exec": "~/.config/waybar/scripts/cpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "􀀂 {text}",
+        "format": "<span color='#f2cdcd'>􀀂</span> {text}",
         "tooltip": true
     },
 
@@ -100,12 +100,12 @@
         "exec": "~/.config/waybar/scripts/gpu-temp.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "􀀃 {text}",
+        "format": "<span color='#f2cdcd'>􀀃</span> {text}",
         "tooltip": true
     },
 
     "pulseaudio": {
-        "format": "{icon} {volume}%",
+        "format": "<span color='#b4befe'>{icon}</span> {volume}%",
         "format-muted": "􀀇 muted",
         "format-icons": {
             "default": ["􀀄", "􀀅", "􀀆"]

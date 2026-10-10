@@ -97,4 +97,9 @@ for i in "${!lines[@]}"; do
     tooltip+="${lines[$i]}"
 done
 
-printf '{"text":"%s %s","class":"%s","tooltip":"%s"}\n' "􀀉" "$text" "$class" "$tooltip"
+# Online gets its own icon tint; offline leaves the icon uncoloured so the
+# whole chip turns red together.
+icon="􀀉"
+[ "$class" = online ] && icon='<span color=\"#94e2d5\">􀀉</span>'
+
+printf '{"text":"%s %s","class":"%s","tooltip":"%s"}\n' "$icon" "$text" "$class" "$tooltip"

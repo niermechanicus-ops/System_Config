@@ -15,6 +15,6 @@ help='\n\nLeft-click   choose colour\nRight-click   on / off'
 if [[ $color == 000000 ]]; then
 	printf '{"text":"􀀈 OFF","tooltip":"RGB off%s","class":"off"}\n' "$help"
 else
-	printf '{"text":"􀀈 RGB","tooltip":"RGB #%s%s","class":"on"}\n' \
+	printf '{"text":"<span color=\\\"#cba6f7\\\">􀀈</span> RGB","tooltip":"RGB #%s%s","class":"on"}\n' \
 		"$color" "$help"
 fi
