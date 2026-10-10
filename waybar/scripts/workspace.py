@@ -10,16 +10,15 @@
 # when this tile's state actually changes. State comes from the request socket
 # directly, so no hyprctl/jq processes are spawned per event.
 #
-#   empty     nothing open there          hollow square
-#   occupied  has windows                 filled square
+# Each tile is just its number; the state is shown by colour (style.css):
+#   empty     nothing open there          dim plum
+#   occupied  has windows                 cream
 #   visible   on screen on the 4K, but focus is on the other monitor
-#                                         hollow heart
-#   active    the workspace you're in     heart
+#                                         pink
+#   active    the workspace you're in     dark on a pink block
 import json, os, socket, sys
 
 N = int(sys.argv[1])
-GLYPH = {"empty": "\U0010000D", "occupied": "\U0010000E",
-         "active": "\U0010000F", "visible": "\U00100010"}
 SOCK = os.path.join(os.environ["XDG_RUNTIME_DIR"], "hypr",
                     os.environ["HYPRLAND_INSTANCE_SIGNATURE"])
 # Events that can change which workspace exists, has windows, or has focus.
@@ -52,7 +51,7 @@ def emit():
     st = state()
     if st != last:
         last = st
-        print(json.dumps({"text": GLYPH[st], "class": st,
+        print(json.dumps({"text": str(N), "class": st,
                           "tooltip": f"Workspace {N}"}, ensure_ascii=False), flush=True)
 
 

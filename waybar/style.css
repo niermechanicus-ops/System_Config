@@ -219,20 +219,32 @@ window#waybar {
 
 /* ---- workspace tiles (centre) -----------------------------------------
  * The group gets the chip shape (listed with the others above); the five
- * tiles inside are bare glyphs. 4px apart = two font pixels. */
+ * numbers inside are bare, coloured by state (scripts/workspace.py). */
 #custom-ws1,
 #custom-ws2,
 #custom-ws3,
 #custom-ws4,
 #custom-ws5 {
-    padding: 0 4px;
+    padding: 0 8px;
     text-shadow: 2px 2px 0 #11111b;
 }
 
 #workspaces .empty    { color: #5c5675; }   /* dim plum: nothing there */
 #workspaces .occupied { color: #f5e0dc; }   /* cream: has windows */
-#workspaces .visible  { color: #f5c2e7; }   /* pink hollow heart */
-#workspaces .active   { color: #f5c2e7; }   /* pink heart: you are here */
+#workspaces .visible  { color: #f5c2e7; }   /* pink: on screen, focus elsewhere */
+
+/* You are here: a pink block with the number cut out of it, bevelled like
+ * a pressed game button. Pixel inset of 2px top and bottom keeps it inside
+ * the chip's own bevel. */
+#workspaces .active {
+    color: #1e1e2e;
+    background: #f5c2e7;
+    text-shadow: none;
+    margin: 4px 0;
+    box-shadow:
+        inset 2px 2px 0 0 #fbe0f3,
+        inset -2px -2px 0 0 #c98fb8;
+}
 
 /* Hovering a tile lights it up a step, so it reads as clickable. */
 #workspaces .empty:hover    { color: #8a83a6; }
