@@ -76,7 +76,8 @@ window#waybar {
  * edge, so the 2x2 corners stay empty, which is the notched pixel corner.
  */
 #clock.date,
-#clock.time,
+#custom-clock,
+#workspaces,
 #custom-cpu-temp,
 #custom-gpu-temp,
 #custom-cpu-usage,
@@ -201,8 +202,13 @@ window#waybar {
     color: #f5e0dc;               /* cream */
 }
 
-#clock.time {
-    color: #f59575;               /* claude shimmer */
+/* Time-of-day clock (scripts/clock.sh). The icon is tinted in the script;
+ * these set the digits, drifting peach -> pink -> lavender through the day. */
+#custom-clock.day   { color: #f59575; }   /* claude shimmer */
+#custom-clock.dusk  { color: #f5c2e7; }   /* pink */
+#custom-clock.night { color: #b4befe; }   /* lavender */
+
+#custom-clock {
     /* Every chip is now the same family, size and weight — the modules are
      * distinguished by colour alone. The extra padding this chip used to
      * carry was compensating for bold being wider; at regular weight the
@@ -210,3 +216,24 @@ window#waybar {
      * clear of the bar edge. */
     margin-right: 12px;
 }
+
+/* ---- workspace tiles (centre) -----------------------------------------
+ * The group gets the chip shape (listed with the others above); the five
+ * tiles inside are bare glyphs. 4px apart = two font pixels. */
+#custom-ws1,
+#custom-ws2,
+#custom-ws3,
+#custom-ws4,
+#custom-ws5 {
+    padding: 0 4px;
+    text-shadow: 2px 2px 0 #11111b;
+}
+
+#workspaces .empty    { color: #5c5675; }   /* dim plum: nothing there */
+#workspaces .occupied { color: #f5e0dc; }   /* cream: has windows */
+#workspaces .visible  { color: #f5c2e7; }   /* pink hollow heart */
+#workspaces .active   { color: #f5c2e7; }   /* pink heart: you are here */
+
+/* Hovering a tile lights it up a step, so it reads as clickable. */
+#workspaces .empty:hover    { color: #8a83a6; }
+#workspaces .occupied:hover { color: #ffffff; }

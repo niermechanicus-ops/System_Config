@@ -15,7 +15,7 @@
     "output": ["DP-1"],
 
     "modules-left": ["custom/network"],
-    "modules-center": [],
+    "modules-center": ["group/workspaces"],
     "modules-right": [
         "custom/rgb",
         "custom/cpu-usage",
@@ -24,8 +24,22 @@
         "custom/gpu-temp",
         "pulseaudio",
         "clock#date",
-        "clock#time"
+        "custom/clock"
     ],
+
+    // Workspaces 1-5 (the ones that live on this monitor) as pixel tiles. One
+    // custom module per tile, not waybar's hyprland/workspaces: that module's
+    // click sends the old "dispatch workspace N", which the Lua config rejects.
+    // See scripts/workspace.py for the four tile states.
+    "group/workspaces": {
+        "orientation": "horizontal",
+        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
+    },
+    "custom/ws1": { "exec": "~/.config/waybar/scripts/workspace.py 1", "return-type": "json", "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'" },
+    "custom/ws2": { "exec": "~/.config/waybar/scripts/workspace.py 2", "return-type": "json", "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'" },
+    "custom/ws3": { "exec": "~/.config/waybar/scripts/workspace.py 3", "return-type": "json", "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'" },
+    "custom/ws4": { "exec": "~/.config/waybar/scripts/workspace.py 4", "return-type": "json", "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'" },
+    "custom/ws5": { "exec": "~/.config/waybar/scripts/workspace.py 5", "return-type": "json", "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'" },
 
     // Icons are pixel-art glyphs from icons/PixelBarIcons.ttf (Private Use
     // Area-B, U+100000+), not Nerd Font glyphs. They render as blank boxes in
@@ -47,11 +61,30 @@
         // strftime — %-d (unpadded day) is NOT supported and throws
         // "chrono format error". Use %d.
         "format": "{:%A, %B %d}",
-        "tooltip": false
+        // Hover for a month calendar; scroll over the date to flip months.
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "on-scroll": 1,
+            "format": {
+                "months":   "<span color='#f59575'>{}</span>",
+                "weekdays": "<span color='#f9e2af'>{}</span>",
+                "days":     "<span color='#f5e0dc'>{}</span>",
+                "today":    "<span background='#f5c2e7' color='#1e1e2e'>{}</span>"
+            }
+        },
+        "actions": {
+            "on-scroll-up": "shift_down",
+            "on-scroll-down": "shift_up"
+        }
     },
 
-    "clock#time": {
-        "format": "{:%H:%M}",
+    // Replaces clock#time: sun/sunset/moon icon, colour drifts with the day.
+    // Long-running (no interval); prints only when the minute changes.
+    "custom/clock": {
+        "exec": "~/.config/waybar/scripts/clock.sh",
+        "return-type": "json",
+        "format": "{}",
         "tooltip": false
     },
 
@@ -76,7 +109,7 @@
         // The script averages over the gap between runs, so this is also the
         // averaging window.
         "interval": 5,
-        "format": "<span color='#f9e2af'>􀀀</span> {text}",
+        "format": "<span color='#f9e2af'>􀀀</span> {}",
         "tooltip": true
     },
 
@@ -84,7 +117,7 @@
         "exec": "~/.config/waybar/scripts/gpu-usage.sh",
         "return-type": "json",
         "interval": 5,
-        "format": "<span color='#f9e2af'>􀀁</span> {text}",
+        "format": "<span color='#f9e2af'>􀀁</span> {}",
         "tooltip": true
     },
 

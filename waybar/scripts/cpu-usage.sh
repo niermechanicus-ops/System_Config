@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CPU utilisation chip for waybar. Styling lives in waybar/style.css
+# CPU utilisation meter for waybar. Styling lives in waybar/style.css
 # (.normal / .busy).
 #
 # Utilisation is the delta of /proc/stat's aggregate "cpu" line between this
@@ -32,5 +32,6 @@ di=$(( idle_now - idle_prev ))
 (( pct >= BUSY )) && class=busy || class=normal
 
 read -r l1 l5 l15 _ < /proc/loadavg
-printf '{"text":"%d%%","tooltip":"CPU %d%% (5s average)\\nload %s / %s / %s on %d threads","class":"%s"}\n' \
-    "$pct" "$pct" "$l1" "$l5" "$l15" "$(nproc)" "$class"
+. "$(dirname "$0")/meter.sh"
+printf '{"text":"%s","tooltip":"CPU %d%% (5s average)\\nload %s / %s / %s on %d threads","class":"%s"}\n' \
+    "$(meter "$pct" "$class")" "$pct" "$l1" "$l5" "$l15" "$(nproc)" "$class"

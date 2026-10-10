@@ -21,5 +21,6 @@ fi
 
 (( pct >= BUSY )) && class=busy || class=normal
 
-printf '{"text":"%d%%","tooltip":"GPU %d%%\\nVRAM %.1f / %.1f GiB\\npower %.0f W","class":"%s"}\n' \
-    "$pct" "$pct" "$(awk "BEGIN{print $mem_used/1024}")" "$(awk "BEGIN{print $mem_total/1024}")" "${power:-0}" "$class"
+. "$(dirname "$0")/meter.sh"
+printf '{"text":"%s","tooltip":"GPU %d%%\\nVRAM %.1f / %.1f GiB\\npower %.0f W","class":"%s"}\n' \
+    "$(meter "$pct" "$class")" "$pct" "$(awk "BEGIN{print $mem_used/1024}")" "$(awk "BEGIN{print $mem_total/1024}")" "${power:-0}" "$class"
